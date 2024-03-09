@@ -14,6 +14,13 @@ public class CampusService {
 
     private final CampusRepository campusRepository;
 
+    @Transactional
+    public Long save(String campusName) {
+        Campus campus = Campus.makeCampus(campusName);
+        campusRepository.save(campus);
+        return campus.getId();
+    }
+
     public Campus findById(Long id) {
         return campusRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("해당 id의 캠버스가 존재하지 않습니다."));
