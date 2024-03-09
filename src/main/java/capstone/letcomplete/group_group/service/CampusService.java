@@ -2,6 +2,7 @@ package capstone.letcomplete.group_group.service;
 
 import capstone.letcomplete.group_group.entity.Campus;
 import capstone.letcomplete.group_group.exception.DataNotFoundException;
+import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.repository.CampusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,14 @@ public class CampusService {
 
     @Transactional
     public Long save(String campusName) {
-        Campus campus = Campus.makeCampus(campusName);
-        campusRepository.save(campus);
+        validateCampusName(campusName);
+        Campus campus = campusRepository.save(Campus.makeCampus(campusName));
         return campus.getId();
+    }
+
+    public void validateCampusName(String name) {
+        if(campusRepository.findByName(name).isPresent())
+            throw new InvalidInputException("캠버스 이름이 중복입니다.");
     }
 
     public Campus findById(Long id) {

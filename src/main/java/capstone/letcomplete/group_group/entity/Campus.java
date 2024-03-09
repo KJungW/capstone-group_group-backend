@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Campus {
     @Id @GeneratedValue
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     public static Campus makeCampus(String name) {

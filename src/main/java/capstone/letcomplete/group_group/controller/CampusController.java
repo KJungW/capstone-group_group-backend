@@ -2,6 +2,7 @@ package capstone.letcomplete.group_group.controller;
 
 import capstone.letcomplete.group_group.dto.output.SaveCampusOutput;
 import capstone.letcomplete.group_group.service.CampusService;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,9 @@ public class CampusController {
     private final CampusService campusService;
 
     @PostMapping()
-    public SaveCampusOutput save(@RequestParam(required = true) String campusName){
+    public SaveCampusOutput save(
+            @NotBlank @RequestParam(required = true) String campusName
+    ){
         return new SaveCampusOutput(campusService.save(campusName));
     }
 
