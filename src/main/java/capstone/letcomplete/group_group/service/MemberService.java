@@ -35,7 +35,7 @@ public class MemberService {
     }
 
     private void validateEmail(String email) {
-        memberRepository.findByEmail(email).orElseThrow(
-                ()->new InvalidInputException("이미 존재하는 이메일입니다."));
+        if(memberRepository.findByEmail(email).isPresent())
+            throw new InvalidInputException("이미 존재하는 이메일입니다.");
     }
 }
