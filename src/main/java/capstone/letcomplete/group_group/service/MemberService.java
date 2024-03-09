@@ -25,11 +25,12 @@ public class MemberService {
         String email = input.getEmail();
         validateEmail(email);
         String password = passwordEncoder.encode(input.getPassword());
+        String nickName = input.getNickName();
         Campus campus = campusService.findById(input.getCampusId());
 
         // 회원정보 저장
         Member newMember = memberRepository.save(
-                Member.makeMember(email, password, campus));
+                Member.makeMember(email, password, nickName, campus));
         return newMember.getId();
     }
 

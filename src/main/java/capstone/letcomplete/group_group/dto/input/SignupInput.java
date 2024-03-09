@@ -15,6 +15,8 @@ public class SignupInput {
     private String email;
     @NotBlank
     private String password;
+    @NotBlank
+    private String nickName;
     @NotNull
     @Positive
     private Long campusId;

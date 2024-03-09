@@ -18,14 +18,18 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String nickName;
+
     @ManyToOne
     @JoinColumn(name="CAMPUS_ID", nullable = false)
     private Campus campus;
 
-    public static Member makeMember(String email, String password, Campus campus) {
+    public static Member makeMember(String email, String password, String nickName, Campus campus) {
         Member member = new Member();
         member.email = email;
         member.password = password;
+        member.nickName = nickName;
         member.campus = campus;
         return member;
     }
