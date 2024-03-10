@@ -86,7 +86,7 @@ public class JwtUtil {
     /*
      * JWT token에서 memberId 추출
      */
-    public Long getMemberIdFromToken(String token) {
+    public Long getIdFromToken(String token) {
         return getClaims(token).get("id", Long.class);
     }
 
