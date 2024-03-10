@@ -4,6 +4,7 @@ import capstone.letcomplete.group_group.dto.input.LoginInput;
 import capstone.letcomplete.group_group.dto.logic.JwtClaimsDataDto;
 import capstone.letcomplete.group_group.dto.logic.MemberInfoDto;
 import capstone.letcomplete.group_group.entity.Member;
+import capstone.letcomplete.group_group.entity.enumtype.AccountType;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,6 @@ public class AuthService {
 
         // Access Token 생성
         return jwtUtil.makeAccessToken(new JwtClaimsDataDto(
-                findMember.getId(), findMember.getEmail(), findMember.getRole().toString()));
+                findMember.getId(), findMember.getEmail(), AccountType.MEMBER));
     }
 }

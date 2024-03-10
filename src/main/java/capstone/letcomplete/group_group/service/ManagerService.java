@@ -6,6 +6,7 @@ import capstone.letcomplete.group_group.dto.logic.JwtClaimsDataDto;
 import capstone.letcomplete.group_group.dto.logic.MemberInfoDto;
 import capstone.letcomplete.group_group.entity.Manager;
 import capstone.letcomplete.group_group.entity.Member;
+import capstone.letcomplete.group_group.entity.enumtype.AccountType;
 import capstone.letcomplete.group_group.entity.enumtype.ManagerRoleType;
 import capstone.letcomplete.group_group.exception.DataNotFoundException;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
@@ -51,7 +52,7 @@ public class ManagerService {
 
         // Access Token 생성
         return jwtUtil.makeAccessToken(new JwtClaimsDataDto(
-                manager.getId(), manager.getEmail(), manager.getRole().toString()
+                manager.getId(), manager.getEmail(), AccountType.MANAGER
         ));
     }
 

@@ -1,5 +1,6 @@
 package capstone.letcomplete.group_group.dto.logic;
 
+import capstone.letcomplete.group_group.entity.enumtype.AccountType;
 import capstone.letcomplete.group_group.entity.enumtype.MemberRoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,5 +10,5 @@ import lombok.Getter;
 public class JwtClaimsDataDto {
     private Long id;
     private String email;
-    private String role;
+    private AccountType role;
 }
