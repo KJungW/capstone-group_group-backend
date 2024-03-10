@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class SignupOutput {
-    private Long memberId;
+    private Long id;
 }

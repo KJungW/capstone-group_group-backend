@@ -1,6 +1,6 @@
 package capstone.letcomplete.group_group.controller;
 
-import capstone.letcomplete.group_group.dto.input.SignupInput;
+import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
 import capstone.letcomplete.group_group.dto.output.SignupOutput;
 import capstone.letcomplete.group_group.service.MemberService;
 import jakarta.validation.Valid;
@@ -17,7 +17,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public SignupOutput signup(@RequestBody @Valid SignupInput input){
+    public SignupOutput signup(@RequestBody @Valid SignupMemberInput input){
         return new SignupOutput(memberService.signup(input));
     }
 

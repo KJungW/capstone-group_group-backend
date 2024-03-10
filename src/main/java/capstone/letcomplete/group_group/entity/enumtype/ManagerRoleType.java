@@ -1,5 +1,5 @@
 package capstone.letcomplete.group_group.entity.enumtype;
 
-public enum MemberRoleType {
-    COMMON
+public enum ManagerRoleType {
+    FRONT, BACK
 }

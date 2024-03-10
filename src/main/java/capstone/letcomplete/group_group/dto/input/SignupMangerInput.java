@@ -1,15 +1,15 @@
 package capstone.letcomplete.group_group.dto.input;
 
+import capstone.letcomplete.group_group.entity.enumtype.ManagerRoleType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SignupInput {
+public class SignupMangerInput {
     @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
     @NotBlank
     private String email;
@@ -18,6 +18,5 @@ public class SignupInput {
     @NotBlank
     private String nickName;
     @NotNull
-    @Positive
-    private Long campusId;
+    private ManagerRoleType role;
 }

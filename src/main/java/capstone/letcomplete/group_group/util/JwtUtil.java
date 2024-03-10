@@ -1,6 +1,6 @@
 package capstone.letcomplete.group_group.util;
 
-import capstone.letcomplete.group_group.dto.logic.MemberInfoDto;
+import capstone.letcomplete.group_group.dto.logic.JwtClaimsDataDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -30,19 +30,19 @@ public class JwtUtil {
     /*
      * Access Token 생성
      */
-    public String makeAccessToken(MemberInfoDto member) {
-        return makeToken(member, accessTokenExpireTime);
+    public String makeAccessToken(JwtClaimsDataDto dto) {
+        return makeToken(dto, accessTokenExpireTime);
     }
 
     /*
      * JWT 토큰 생성
      */
-    private String makeToken(MemberInfoDto member, long expireTime) {
+    private String makeToken(JwtClaimsDataDto dto, long expireTime) {
         // JWT 토큰에 넣을 claims 생성
         Claims claims = Jwts.claims();
-        claims.put("memberId", member.getId());
-        claims.put("email", member.getEmail());
-        claims.put("role", member.getRole());
+        claims.put("id", dto.getId());
+        claims.put("email", dto.getEmail());
+        claims.put("role", dto.getRole());
 
         // JWT 토큰의 유효기간 세팅
         ZonedDateTime now = ZonedDateTime.now();
@@ -87,7 +87,7 @@ public class JwtUtil {
      * JWT token에서 memberId 추출
      */
     public Long getMemberIdFromToken(String token) {
-        return getClaims(token).get("memberId", Long.class);
+        return getClaims(token).get("id", Long.class);
     }
 
     /*

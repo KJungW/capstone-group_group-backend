@@ -1,6 +1,6 @@
 package capstone.letcomplete.group_group.service;
 
-import capstone.letcomplete.group_group.dto.input.SignupInput;
+import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
 import capstone.letcomplete.group_group.entity.Campus;
 import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.enumtype.MemberRoleType;
@@ -22,7 +22,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional()
-    public Long signup(SignupInput input) {
+    public Long signup(SignupMemberInput input) {
         // 회원가입 정보 검증 및 가공
         String email = input.getEmail();
         validateEmail(email);
