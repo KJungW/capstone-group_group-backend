@@ -32,7 +32,7 @@ public class MemberService {
 
         // 회원정보 저장
         Member newMember = memberRepository.save(
-                Member.makeMember(email, password, nickName, MemberRoleType.COMMON, campus));
+                Member.makeMember(email, password, nickName, MemberRoleType.ME_COMMON, campus));
         return newMember.getId();
     }
 
