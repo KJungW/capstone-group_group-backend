@@ -2,6 +2,7 @@ package capstone.letcomplete.group_group.config;
 
 import capstone.letcomplete.group_group.filter.JwtAuthFilter;
 import capstone.letcomplete.group_group.service.userdetail.ManagerUserDetailService;
+import capstone.letcomplete.group_group.service.userdetail.MemberUserDetailService;
 import capstone.letcomplete.group_group.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final ManagerUserDetailService managerUserDetailService;
+    private final MemberUserDetailService memberUserDetailService;
     private final JwtUtil jwtUtil;
 
     @Bean
@@ -42,7 +44,8 @@ public class SecurityConfig {
 
         // jwt토큰 검증 필터를 추가
         http.addFilterBefore(
-                new JwtAuthFilter(managerUserDetailService, jwtUtil), UsernamePasswordAuthenticationFilter.class
+                new JwtAuthFilter(managerUserDetailService, memberUserDetailService, jwtUtil),
+                UsernamePasswordAuthenticationFilter.class
         );
 
         // http 요청에 대한 인가규칙 설정 (현재는 모두 허용, 이후 메서드별로 규칙설정)

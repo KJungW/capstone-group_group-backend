@@ -1,7 +1,9 @@
 package capstone.letcomplete.group_group.filter;
 
 import capstone.letcomplete.group_group.entity.enumtype.AccountType;
+import capstone.letcomplete.group_group.exception.AuthorizationException;
 import capstone.letcomplete.group_group.service.userdetail.ManagerUserDetailService;
+import capstone.letcomplete.group_group.service.userdetail.MemberUserDetailService;
 import capstone.letcomplete.group_group.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -22,6 +24,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final ManagerUserDetailService managerUserDetailService;
+    private final MemberUserDetailService memberUserDetailService;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -59,12 +62,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private UserDetails makeUserDetail(Long id, AccountType accountType) {
         UserDetails userDetails;
-//        if(accountType == AccountType.MANAGER) {
-//            userDetails = managerUserDetailService.loadUserByUsername(id.toString());
-//        } else {
-//            //userDetails = customUserDetailService.loadUserByUsername(id.toString());
-//        }
-        userDetails = managerUserDetailService.loadUserByUsername(id.toString());
+        if(accountType == AccountType.MANAGER) {
+            userDetails = managerUserDetailService.loadUserByUsername(id.toString());
+        } else if(accountType == AccountType.MEMBER) {
+            userDetails = memberUserDetailService.loadUserByUsername(id.toString());
+        } else {
+            throw new AuthorizationException("계정타입이 올바르지 않습니다.");
+        }
         return userDetails;
     }
 }
