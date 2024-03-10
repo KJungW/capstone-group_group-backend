@@ -3,6 +3,7 @@ package capstone.letcomplete.group_group.service;
 import capstone.letcomplete.group_group.dto.input.SignupInput;
 import capstone.letcomplete.group_group.entity.Campus;
 import capstone.letcomplete.group_group.entity.Member;
+import capstone.letcomplete.group_group.entity.enumtype.MemberRoleType;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class MemberService {
 
         // 회원정보 저장
         Member newMember = memberRepository.save(
-                Member.makeMember(email, password, nickName, campus));
+                Member.makeMember(email, password, nickName, MemberRoleType.COMMON, campus));
         return newMember.getId();
     }
 
