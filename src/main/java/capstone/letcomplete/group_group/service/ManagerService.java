@@ -66,9 +66,9 @@ public class ManagerService {
         return managerRepository.findByEmail(email).orElseThrow(
                 () -> new DataNotFoundException("이메일에 해당하는 회원이 없습니다."));
     }
-//
-//    public Member findById(Long id) {
-//        return managerRepository.findById(id).orElseThrow(
-//                () -> new DataNotFoundException("id에 해당하는 회원이 없습니다."));
-//    }
+
+    public Manager findById(Long id) {
+        return managerRepository.findById(id).orElseThrow(
+                () -> new DataNotFoundException("id에 해당하는 회원이 없습니다."));
+    }
 }

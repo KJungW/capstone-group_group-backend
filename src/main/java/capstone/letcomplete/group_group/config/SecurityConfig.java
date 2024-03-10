@@ -1,5 +1,8 @@
 package capstone.letcomplete.group_group.config;
 
+import capstone.letcomplete.group_group.filter.JwtAuthFilter;
+import capstone.letcomplete.group_group.service.userdetail.ManagerUserDetailService;
+import capstone.letcomplete.group_group.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,12 +13,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity   // 메서드별로 보안구성
+@EnableMethodSecurity 
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final ManagerUserDetailService managerUserDetailService;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)
@@ -30,10 +36,19 @@ public class SecurityConfig {
                 -> sessionManagement.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS));
 
-        // FormLogin, BasicHttp(스프링 시큐리티의 HTTP 기본 인증)
+        // FormLogin, BasicHttp비활성화
         http.formLogin((form)->form.disable());
         http.httpBasic(AbstractHttpConfigurer::disable);
 
+        // jwt토큰 검증 필터를 추가
+        http.addFilterBefore(
+                new JwtAuthFilter(managerUserDetailService, jwtUtil), UsernamePasswordAuthenticationFilter.class
+        );
+
+        // http 요청에 대한 인가규칙 설정 (현재는 모두 허용, 이후 메서드별로 규칙설정)
+        http.authorizeHttpRequests(
+                authorize -> authorize.anyRequest().permitAll()
+        );
 
         return http.build();
 
