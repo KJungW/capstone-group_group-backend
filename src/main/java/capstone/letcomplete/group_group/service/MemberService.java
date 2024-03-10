@@ -4,6 +4,7 @@ import capstone.letcomplete.group_group.dto.input.SignupInput;
 import capstone.letcomplete.group_group.entity.Campus;
 import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.enumtype.MemberRoleType;
+import capstone.letcomplete.group_group.exception.DataNotFoundException;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +39,15 @@ public class MemberService {
     private void validateEmail(String email) {
         if(memberRepository.findByEmail(email).isPresent())
             throw new InvalidInputException("이미 존재하는 이메일입니다.");
+    }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(
+                () -> new DataNotFoundException("이메일에 해당하는 회원이 없습니다."));
+    }
+
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElseThrow(
+                () -> new DataNotFoundException("id에 해당하는 회원이 없습니다."));
     }
 }
