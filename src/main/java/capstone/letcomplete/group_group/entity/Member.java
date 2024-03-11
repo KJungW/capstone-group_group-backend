@@ -26,7 +26,7 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private MemberRoleType role;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="CAMPUS_ID", nullable = false)
     private Campus campus;
 

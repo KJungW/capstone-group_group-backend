@@ -12,7 +12,7 @@ public class RequirementsFormResult {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="REQUIREMENTS_FORM_ID", nullable = false)
     private RequirementsForm targetForm;
 

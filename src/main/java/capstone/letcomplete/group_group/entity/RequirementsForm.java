@@ -12,7 +12,7 @@ public class RequirementsForm {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="POST_ID", nullable = false)
     private Post post;
 

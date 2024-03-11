@@ -12,7 +12,7 @@ public class Board {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="CAMPUS_ID", nullable = false)
     private Campus campus;
 
