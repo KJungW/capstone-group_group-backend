@@ -27,7 +27,9 @@ public class CampusController {
     @Operation(summary = "Add New Campus", description = "새로운 캠퍼스를 등록")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "400", description = "Bad Request(파라미터를 제대로 입력했는지 확인, 학교이름 중복등록 확인)")
+            @ApiResponse(responseCode = "400", description = "Bad Request(파라미터를 제대로 입력했는지 확인, 학교이름 중복등록 확인)"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized (로그인 안됨)"),
+            @ApiResponse(responseCode = "403", description = "Forbidden (권한 없음)")
     })
     public SaveCampusOutput save(
             @Parameter(description = "등록한 캠퍼스 이름")
