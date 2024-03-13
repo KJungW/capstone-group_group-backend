@@ -4,6 +4,10 @@ import capstone.letcomplete.group_group.dto.input.LoginInput;
 import capstone.letcomplete.group_group.dto.input.SignupMangerInput;
 import capstone.letcomplete.group_group.dto.output.SignupOutput;
 import capstone.letcomplete.group_group.service.ManagerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,15 +18,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/manager")
 @RequiredArgsConstructor
+@Tag(name = "Manager", description = "관지자 관련 모든 API")
 public class ManagerController {
     private final ManagerService mangerService;
 
     @PostMapping("/signup")
+    @Operation(summary = "Manager Signup", description = "관라자 계정 생성")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+    })
     public SignupOutput signup(@RequestBody @Valid SignupMangerInput input){
         return new SignupOutput(mangerService.signup(input));
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Manager Login", description = "관리자 로그인")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+    })
     public String login(@Valid @RequestBody LoginInput loginInput) {
         return mangerService.login(loginInput);
     }

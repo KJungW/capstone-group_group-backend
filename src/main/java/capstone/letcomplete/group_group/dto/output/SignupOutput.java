@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class SignupOutput {
-    @Schema(description = "회원가입이 완료된 일반회원의 ID")
+    @Schema(description = "회원가입이 완료된 회원의 ID")
     private Long id;
 }
