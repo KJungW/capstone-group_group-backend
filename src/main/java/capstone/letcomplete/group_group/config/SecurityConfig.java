@@ -1,5 +1,7 @@
 package capstone.letcomplete.group_group.config;
 
+import capstone.letcomplete.group_group.exception.handler.JwtAccessDeniedHandler;
+import capstone.letcomplete.group_group.exception.handler.JwtAuthenticationEntryPoint;
 import capstone.letcomplete.group_group.filter.JwtAuthFilter;
 import capstone.letcomplete.group_group.service.userdetail.ManagerUserDetailService;
 import capstone.letcomplete.group_group.service.userdetail.MemberUserDetailService;
@@ -24,6 +26,8 @@ public class SecurityConfig {
     private final ManagerUserDetailService managerUserDetailService;
     private final MemberUserDetailService memberUserDetailService;
     private final JwtUtil jwtUtil;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)
@@ -48,6 +52,13 @@ public class SecurityConfig {
                 UsernamePasswordAuthenticationFilter.class
         );
 
+        http.exceptionHandling((exceptionHandling) ->
+                exceptionHandling
+                        // 인증은 되었지만 접근 권한이 없을 경우
+                        .accessDeniedHandler(accessDeniedHandler)
+                        // 인증에 실패할 경우
+                        .authenticationEntryPoint(authenticationEntryPoint)
+        );
         // http 요청에 대한 인가규칙 설정 (현재는 모두 허용, 이후 메서드별로 규칙설정)
         http.authorizeHttpRequests(
                 authorize -> authorize.anyRequest().permitAll()
