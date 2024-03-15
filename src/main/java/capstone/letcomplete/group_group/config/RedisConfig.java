@@ -22,6 +22,8 @@ public class RedisConfig {
     }
 
     public RedisConnectionFactory makeRedisConnectionFactoryForMail() {
-        return new LettuceConnectionFactory(host, port);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(host, port);
+        lettuceConnectionFactory.afterPropertiesSet();
+        return lettuceConnectionFactory;
     }
 }
