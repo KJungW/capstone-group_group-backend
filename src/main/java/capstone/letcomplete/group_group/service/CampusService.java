@@ -31,4 +31,8 @@ public class CampusService {
         return campusRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("해당 id의 캠버스가 존재하지 않습니다."));
     }
+
+    public void checkCampusExistence(Long id) {
+        findById(id);
+    }
 }
