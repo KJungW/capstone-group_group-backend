@@ -66,7 +66,7 @@ public class DataSetting {
 
     private void createExampleData() {
         Long campusId = campusService.save("Hansung");
-        memberService.signup(new SignupMemberInput("test@test.com", "test1234", "Test", campusId));
+        memberService.saveMember(new SignupMemberInput("test@test.com", "test1234", "Test", campusId));
 
     }
 }

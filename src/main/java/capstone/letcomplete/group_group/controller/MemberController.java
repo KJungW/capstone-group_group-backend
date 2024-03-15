@@ -7,12 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/member")
@@ -27,9 +25,19 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "400", description = "Bad Request(파라미터 유효성, 이메일 중복, 캠퍼스ID 유효성 등을 확인")
     })
-    public SignupOutput signup(@RequestBody @Valid SignupMemberInput input){
-        return new SignupOutput(memberService.signup(input));
+    public void signupStart(@RequestBody @Valid SignupMemberInput input) throws MessagingException {
+        memberService.signupStart(input);
     }
+
+    @GetMapping("signup/complete")
+    public SignupOutput signupComplete(
+            @RequestParam(name="email") String email,
+            @RequestParam(name="certificationNumber") String certificationNumber
+    )  {
+        return new SignupOutput(memberService.signupComplete(email, certificationNumber));
+    }
+
+
 
 
 }

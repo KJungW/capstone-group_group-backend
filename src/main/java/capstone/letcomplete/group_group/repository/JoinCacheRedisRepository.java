@@ -33,8 +33,9 @@ public class JoinCacheRedisRepository {
     /*
      * 회원가입 데이터 조회
      */
-    public String getJoinCache(String email) {
-        return redisTemplate.opsForValue().get(email);
+    public JoinCache getJoinCache(String email) throws JsonProcessingException {
+        String joinCacheJson = redisTemplate.opsForValue().get(email);
+        return objectMapper.readValue(joinCacheJson, JoinCache.class);
     }
 
     /*
