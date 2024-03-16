@@ -22,12 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ManagerController {
     private final ManagerService mangerService;
 
-    @PostMapping("/signup")
-    @Operation(summary = "Manager Signup", description = "관라자 계정 생성")
-    public SignupOutput signup(@RequestBody @Valid SignupMangerInput input){
-        return new SignupOutput(mangerService.signup(input));
-    }
-
     @PostMapping("/login")
     @Operation(summary = "Manager Login", description = "관리자 로그인")
     public String login(@Valid @RequestBody LoginInput loginInput) {
