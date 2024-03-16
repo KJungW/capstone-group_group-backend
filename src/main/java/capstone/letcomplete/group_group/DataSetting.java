@@ -41,22 +41,22 @@ public class DataSetting {
         SignupMangerInput manager0 = new SignupMangerInput(
                 env.getProperty("initialData.manager.manager0.email"),
                 env.getProperty("initialData.manager.manager0.pw"),
-                "manager0", ManagerRoleType.MG_BACK);
+                "manager0", ManagerRoleType.MG_COMMON);
 
         SignupMangerInput manager1 = new SignupMangerInput(
                 env.getProperty("initialData.manager.manager1.email"),
                 env.getProperty("initialData.manager.manager1.pw"),
-                "manager1", ManagerRoleType.MG_BACK);
+                "manager1", ManagerRoleType.MG_COMMON);
 
         SignupMangerInput manager2 = new SignupMangerInput(
                 env.getProperty("initialData.manager.manager2.email"),
                 env.getProperty("initialData.manager.manager2.pw"),
-                "manager2", ManagerRoleType.MG_BACK);
+                "manager2", ManagerRoleType.MG_COMMON);
 
         SignupMangerInput manager3 = new SignupMangerInput(
                 env.getProperty("initialData.manager.manager3.email"),
                 env.getProperty("initialData.manager.manager3.pw"),
-                "manager3", ManagerRoleType.MG_BACK);
+                "manager3", ManagerRoleType.MG_COMMON);
 
         managerService.signup(manager0);
         managerService.signup(manager1);
