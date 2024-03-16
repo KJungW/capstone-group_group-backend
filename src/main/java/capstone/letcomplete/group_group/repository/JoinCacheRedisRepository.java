@@ -1,8 +1,8 @@
 package capstone.letcomplete.group_group.repository;
 
 import capstone.letcomplete.group_group.dto.logic.JoinCache;
+import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -14,10 +14,11 @@ import java.time.Duration;
 public class JoinCacheRedisRepository {
     @Value("${join.cache.valid_time}")
     private Long joinCacheValidTime;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonUtil jsonUtil;
     private final StringRedisTemplate redisTemplate;
     @Autowired
-    public JoinCacheRedisRepository(StringRedisTemplate redisTemplate) {
+    public JoinCacheRedisRepository(JsonUtil jsonUtil, StringRedisTemplate redisTemplate) {
+        this.jsonUtil = jsonUtil;
         this.redisTemplate = redisTemplate;
     }
 
@@ -26,7 +27,7 @@ public class JoinCacheRedisRepository {
      */
     public void saveJoinCache(JoinCache joinCache) throws JsonProcessingException {
         String key = joinCache.getSignupMemberInput().getEmail();
-        String value = objectMapper.writer().writeValueAsString(joinCache);
+        String value = jsonUtil.convertObjectToJson(joinCache);
         redisTemplate.opsForValue().set(key, value, Duration.ofSeconds(joinCacheValidTime));
     }
 
@@ -35,7 +36,7 @@ public class JoinCacheRedisRepository {
      */
     public JoinCache getJoinCache(String email) throws JsonProcessingException {
         String joinCacheJson = redisTemplate.opsForValue().get(email);
-        return objectMapper.readValue(joinCacheJson, JoinCache.class);
+        return jsonUtil.convertJsonToObject(joinCacheJson, JoinCache.class);
     }
 
     /*
