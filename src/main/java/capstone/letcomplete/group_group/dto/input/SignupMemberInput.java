@@ -1,10 +1,8 @@
 package capstone.letcomplete.group_group.dto.input;
 
+import capstone.letcomplete.group_group.value.RegularExpression;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignupMemberInput {
-    @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
     @NotBlank
-    @Schema(description = "회원가입할 유저의 이메일 (중복허용x) (이메일 형식 : ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$)")
+    @Email(regexp = RegularExpression.EMAIL_RE)
+    @Schema(description = "회원가입할 유저의 이메일")
     private String email;
     @NotBlank
+    @Pattern(regexp = RegularExpression.PASSWORD_RE)
     @Schema(description = "회원가입할 유저의 비밀번호")
     private String password;
     @NotBlank
