@@ -23,7 +23,7 @@ public class CampusController {
     private final CampusService campusService;
 
     @PostMapping()
-    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
+    @PreAuthorize("hasRole('ROLE_MG_COMMON')")
     @Operation(summary = "Add New Campus", description = "새로운 캠퍼스를 등록")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Success"),
