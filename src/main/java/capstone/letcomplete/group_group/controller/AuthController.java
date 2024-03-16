@@ -22,10 +22,6 @@ public class AuthController {
 
     @PostMapping("login")
     @Operation(summary = "Member Login", description = "일반 회원 로그인")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "400", description = "Bad Request")
-    })
     public String login(@Valid @RequestBody LoginInput loginInput) {
         return authService.login(loginInput);
     }

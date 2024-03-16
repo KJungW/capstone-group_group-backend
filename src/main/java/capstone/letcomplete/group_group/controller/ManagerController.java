@@ -24,20 +24,12 @@ public class ManagerController {
 
     @PostMapping("/signup")
     @Operation(summary = "Manager Signup", description = "관라자 계정 생성")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "400", description = "Bad Request"),
-    })
     public SignupOutput signup(@RequestBody @Valid SignupMangerInput input){
         return new SignupOutput(mangerService.signup(input));
     }
 
     @PostMapping("/login")
     @Operation(summary = "Manager Login", description = "관리자 로그인")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "400", description = "Bad Request"),
-    })
     public String login(@Valid @RequestBody LoginInput loginInput) {
         return mangerService.login(loginInput);
     }
