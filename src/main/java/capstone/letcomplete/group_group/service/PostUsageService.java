@@ -3,6 +3,8 @@ package capstone.letcomplete.group_group.service;
 import capstone.letcomplete.group_group.dto.entitymake.MakePostDto;
 import capstone.letcomplete.group_group.dto.input.CreatePostInput;
 import capstone.letcomplete.group_group.dto.input.CreateRequirementInput;
+import capstone.letcomplete.group_group.dto.output.GetPostDetailOutput;
+import capstone.letcomplete.group_group.dto.output.GetRequirementOutput;
 import capstone.letcomplete.group_group.entity.Board;
 import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.Post;
@@ -10,6 +12,7 @@ import capstone.letcomplete.group_group.entity.RequirementsForm;
 import capstone.letcomplete.group_group.entity.valuetype.Requirement;
 import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +37,16 @@ public class PostUsageService {
         postService.savePost(newPost);
         formService.SaveRequirementsForm(newForm);
         return newPost.getId();
+    }
+
+    public GetPostDetailOutput getPostDetail(Long id) throws JsonProcessingException {
+        Post post = postService.findById(id);
+        RequirementsForm form = formService.findNewestWithPostId(id);
+        return new GetPostDetailOutput(
+                post.getBoard().getId(), post.getBoard().getTitle(), post.getWriter().getId(), post.getWriter().getNickName(),
+                post.getTitle(), post.getActivityDetail(), post.getPassionSize(), post.getAdditionalWriting(), post.getOpenChatUrl(),
+                makeRequirementOutputsByForm(form)
+        );
     }
 
     private Post makePostByInput(CreatePostInput input) {
@@ -62,6 +75,13 @@ public class PostUsageService {
 
     private String makeRequirementsToJson(List<Requirement> requirementList) throws JsonProcessingException {
         return jsonUtil.convertObjectToJson(requirementList);
+    }
+
+    private List<GetRequirementOutput> makeRequirementOutputsByForm(RequirementsForm form) throws JsonProcessingException {
+        List<Requirement> requirements = jsonUtil.convertJsonToList(form.getRequirements(), Requirement.class);
+        return requirements.stream()
+                .map(requirement -> new GetRequirementOutput(requirement.getTitle(), requirement.getResultType()))
+                .toList();
     }
 
 }
