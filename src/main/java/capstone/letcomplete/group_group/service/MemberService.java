@@ -39,6 +39,7 @@ public class MemberService {
     private final Environment env;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Transactional()
     public void signupStart(SignupMemberInput input) throws MessagingException {
         // 입력된 회원정보에 대한 검증
         validateEmail(input.getEmail());
@@ -87,6 +88,7 @@ public class MemberService {
         }
     }
 
+    @Transactional()
     public Member saveMember(SignupMemberInput input) {
         String email = input.getEmail();
         String password = passwordEncoder.encode(input.getPassword());
