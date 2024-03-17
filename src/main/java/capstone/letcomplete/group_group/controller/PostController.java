@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class PostController {
     private final PostUsageService postUsageService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "Creat Post", description = "모집글을 추가하는 API")
     public SavePostOutput savePost(@Valid @RequestBody CreatePostInput createPostInput) throws JsonProcessingException {
         Long savedPostId = postUsageService.savePost(createPostInput);
