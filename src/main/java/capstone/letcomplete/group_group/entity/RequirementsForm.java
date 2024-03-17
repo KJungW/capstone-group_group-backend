@@ -1,5 +1,6 @@
 package capstone.letcomplete.group_group.entity;
 
+import capstone.letcomplete.group_group.entity.auditing.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RequirementsForm {
+public class RequirementsForm extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
 

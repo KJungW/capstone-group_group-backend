@@ -1,5 +1,6 @@
 package capstone.letcomplete.group_group.entity;
 
+import capstone.letcomplete.group_group.entity.auditing.BaseEntity;
 import capstone.letcomplete.group_group.entity.enumtype.MemberRoleType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
 

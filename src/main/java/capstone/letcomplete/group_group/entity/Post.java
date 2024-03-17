@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.entity;
 
 import capstone.letcomplete.group_group.dto.entitymake.MakePostDto;
+import capstone.letcomplete.group_group.entity.auditing.BaseEntity;
 import capstone.letcomplete.group_group.entity.enumtype.PassionSize;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Post extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
 

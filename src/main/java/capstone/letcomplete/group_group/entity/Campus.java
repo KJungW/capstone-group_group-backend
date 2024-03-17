@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.entity;
 
 
+import capstone.letcomplete.group_group.entity.auditing.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Campus {
+public class Campus extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
     @Column(nullable = false, unique = true)
