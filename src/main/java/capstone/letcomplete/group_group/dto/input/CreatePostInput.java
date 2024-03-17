@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
 public class CreatePostInput {
     @NotNull
     @Min(value = 0)
@@ -35,4 +35,26 @@ public class CreatePostInput {
     private String openChatUrl;
 
     private List<CreateRequirementInput> requirementList;
+
+    public CreatePostInput(Long boardId, Long writerId, String title, String activityDetail,
+                           PassionSize passionSize, String additionalWriting, String openChatUrl,
+                           List<CreateRequirementInput> requirementList) {
+        this.boardId = boardId;
+        this.writerId = writerId;
+        this.title = title;
+        this.activityDetail = activityDetail;
+        this.passionSize = passionSize;
+        this.additionalWriting = additionalWriting;
+        this.openChatUrl = openChatUrl;
+        this.requirementList = requirementList;
+        initCreatePostInput();
+    }
+
+    private void initCreatePostInput() {
+        if(additionalWriting.isEmpty())
+            additionalWriting="";
+        if(requirementList==null){
+            requirementList = new ArrayList<>();
+        }
+    }
 }
