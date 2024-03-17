@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.controller;
 
 import capstone.letcomplete.group_group.dto.input.CreatePostInput;
+import capstone.letcomplete.group_group.dto.output.SavePostOutput;
 import capstone.letcomplete.group_group.service.PostUsageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
@@ -17,7 +18,8 @@ public class PostController {
     private final PostUsageService postUsageService;
 
     @PostMapping
-    public void savePost(@Valid @RequestBody CreatePostInput createPostInput) throws JsonProcessingException {
-        postUsageService.savePost(createPostInput);
+    public SavePostOutput savePost(@Valid @RequestBody CreatePostInput createPostInput) throws JsonProcessingException {
+        Long savedPostId = postUsageService.savePost(createPostInput);
+        return new SavePostOutput(savedPostId);
     }
 }
