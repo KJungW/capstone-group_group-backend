@@ -13,9 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
     private final PostRepository postRepository;
 
+    @Transactional
+    public Long savePost(Post post) {
+        Post savedPost = postRepository.save(post);
+        return savedPost.getId();
+    }
+
     public Post findById(Long id) {
         return postRepository.findById(id).orElseThrow(
                 ()-> new DataNotFoundException("ID에 해당하는 Post가 존재하지 않습니다.")
         );
     }
+
 }
