@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JsonUtil {
@@ -20,6 +21,7 @@ public class JsonUtil {
     }
 
     public <T> List<T> convertJsonToList(String json, Class<T> clazz) throws JsonProcessingException {
-        return objectMapper.readValue(json, new TypeReference<List<T>>() {});
+        List<T> list = objectMapper.readValue(json, new TypeReference<List<T>>() {});
+        return list.stream().map(item -> objectMapper.convertValue(item, clazz)).collect(Collectors.toList());
     }
 }
