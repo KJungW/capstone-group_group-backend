@@ -2,8 +2,10 @@ package capstone.letcomplete.group_group;
 
 import capstone.letcomplete.group_group.dto.input.SignupMangerInput;
 import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
+import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.enumtype.ManagerRoleType;
 import capstone.letcomplete.group_group.repository.ManagerRepository;
+import capstone.letcomplete.group_group.service.BoardService;
 import capstone.letcomplete.group_group.service.CampusService;
 import capstone.letcomplete.group_group.service.ManagerService;
 import capstone.letcomplete.group_group.service.MemberService;
@@ -21,6 +23,7 @@ public class DataSetting {
     private final ManagerService managerService;
     private final MemberService memberService;
     private final CampusService campusService;
+    private final BoardService boardService;
     private final Environment env;
     @PostConstruct
     private void init() {
@@ -65,8 +68,8 @@ public class DataSetting {
     }
 
     private void createExampleData() {
-        Long campusId = campusService.save("Hansung");
-        memberService.saveMember(new SignupMemberInput("test@test.com", "test1234", "Test", campusId));
-
+        Long campusId = campusService.save("Test Campus");
+        Member memberId = memberService.saveMember(new SignupMemberInput("test@test.com", "test1234", "Test", campusId));
+        Long boardId = boardService.createBoard(campusId, "Test Board");
     }
 }
