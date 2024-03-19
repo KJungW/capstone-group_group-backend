@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Appilcation extends BaseEntity {
+public class Application extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
 
@@ -28,11 +28,11 @@ public class Appilcation extends BaseEntity {
     @JoinColumn(name="REQUIREMENT_FORM_RESULT_ID", nullable = false)
     private RequirementsFormResult requirementsFormResult;
 
-    public static Appilcation makeApplication(
+    public static Application makeApplication(
             Post post, Member applicant, Boolean isPassed,
             RequirementsFormResult requirementsFormResult
     ) {
-        Appilcation appilcation = new Appilcation();
+        Application appilcation = new Application();
         appilcation.post = post;
         appilcation.applicant = applicant;
         appilcation.isPassed = isPassed;
