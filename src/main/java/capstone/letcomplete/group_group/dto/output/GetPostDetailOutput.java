@@ -30,8 +30,6 @@ public class GetPostDetailOutput {
     private PassionSize passionSize;
     @Schema(description = "더하고싶은 말")
     private String additionalWriting;
-    @Schema(description = "오픈채팅방 주소")
-    private String openChatUrl;
 
     @Schema(description = "참여요건 리스트")
     private List<GetRequirementOutput> requirementList;

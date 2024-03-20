@@ -44,7 +44,7 @@ public class PostUsageService {
         RequirementsForm form = formService.findNewestWithPostId(id);
         return new GetPostDetailOutput(
                 post.getBoard().getId(), post.getBoard().getTitle(), post.getWriter().getId(), post.getWriter().getNickName(),
-                post.getTitle(), post.getActivityDetail(), post.getPassionSize(), post.getAdditionalWriting(), post.getOpenChatUrl(),
+                post.getTitle(), post.getActivityDetail(), post.getPassionSize(), post.getAdditionalWriting(),
                 makeRequirementOutputsByForm(form)
         );
     }
