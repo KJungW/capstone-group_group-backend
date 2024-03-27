@@ -21,7 +21,7 @@ public class PostController {
     private final PostUsageService postUsageService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
+    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
     @Operation(summary = "Creat Post", description = "모집글을 추가하는 API")
     public SavePostOutput savePost(@Valid @RequestBody CreatePostInput createPostInput) throws JsonProcessingException {
         Long savedPostId = postUsageService.savePost(createPostInput);
