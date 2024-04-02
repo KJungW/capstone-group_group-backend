@@ -25,11 +25,12 @@ public class MemberController {
 
     @GetMapping("signup/complete")
     @Operation(summary = "Signup Complete", description = "회원가입 인증메일을 클릭했을때 실행되는 API")
-    public SignupOutput signupComplete(
+    public String signupComplete(
             @RequestParam(name="email") String email,
             @RequestParam(name="certificationNumber") String certificationNumber
     )  {
-        return new SignupOutput(memberService.signupComplete(email, certificationNumber));
+        memberService.signupComplete(email, certificationNumber);
+        return "회원가입이 완료되었습니다. 홈페이지로 돌아가서 로그인을 해주세요";
     }
 
 }
