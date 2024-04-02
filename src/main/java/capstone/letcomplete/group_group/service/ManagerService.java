@@ -3,9 +3,8 @@ package capstone.letcomplete.group_group.service;
 import capstone.letcomplete.group_group.dto.input.LoginInput;
 import capstone.letcomplete.group_group.dto.input.SignupMangerInput;
 import capstone.letcomplete.group_group.dto.logic.JwtClaimsDataDto;
-import capstone.letcomplete.group_group.dto.logic.MemberInfoDto;
+import capstone.letcomplete.group_group.dto.output.LoginManagerOutput;
 import capstone.letcomplete.group_group.entity.Manager;
-import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.enumtype.AccountType;
 import capstone.letcomplete.group_group.entity.enumtype.ManagerRoleType;
 import capstone.letcomplete.group_group.exception.DataNotFoundException;
@@ -41,7 +40,7 @@ public class ManagerService {
         return newManager.getId();
     }
 
-    public String login(LoginInput loginInput) {
+    public LoginManagerOutput login(LoginInput loginInput) {
         // 이메일을 가지고 해당하는 회원정보를 가져온다.
         Manager manager = findByEmail(loginInput.getEmail());
 
@@ -51,9 +50,11 @@ public class ManagerService {
         }
 
         // Access Token 생성
-        return jwtUtil.makeAccessToken(new JwtClaimsDataDto(
+        String jwtToken = jwtUtil.makeAccessToken(new JwtClaimsDataDto(
                 manager.getId(), manager.getEmail(), AccountType.MANAGER
         ));
+
+        return new LoginManagerOutput(manager, jwtToken);
     }
 
     private void validateEmail(String email) {

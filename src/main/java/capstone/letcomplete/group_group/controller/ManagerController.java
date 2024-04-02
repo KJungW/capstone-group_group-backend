@@ -1,12 +1,9 @@
 package capstone.letcomplete.group_group.controller;
 
 import capstone.letcomplete.group_group.dto.input.LoginInput;
-import capstone.letcomplete.group_group.dto.input.SignupMangerInput;
-import capstone.letcomplete.group_group.dto.output.SignupOutput;
+import capstone.letcomplete.group_group.dto.output.LoginManagerOutput;
 import capstone.letcomplete.group_group.service.ManagerService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +21,7 @@ public class ManagerController {
 
     @PostMapping("/login")
     @Operation(summary = "Manager Login", description = "관리자 로그인")
-    public String login(@Valid @RequestBody LoginInput loginInput) {
+    public LoginManagerOutput login(@Valid @RequestBody LoginInput loginInput) {
         return mangerService.login(loginInput);
     }
 }
