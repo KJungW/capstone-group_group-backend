@@ -52,7 +52,7 @@ public class MemberService {
             joinCacheRedisRepository.saveJoinCache(new JoinCache(certificationNumber, input));
             // 메일 내용 전송
             String title = "[Group-Group] 회원가입 이메일 인증";
-            String content = makeSignupComplete(certificationNumber, input.getEmail());
+            String content = makeSignupCompleteMailContent(certificationNumber, input.getEmail());
             mailSendService.sendEmail(input.getEmail(), title, content);
 
         } catch (NoSuchAlgorithmException e) {
@@ -109,15 +109,22 @@ public class MemberService {
         return result.toString();
     }
 
-    private String makeSignupComplete(String certificationNumber, String email) {
-        String domain = env.getProperty("project_info.domain");
-        String port = env.getProperty("project_info.port");
+    private String makeSignupCompleteMailContent(String certificationNumber, String email) {
+        String baseURL = env.getProperty("project_info.baseURL");
         String certificationNumberProperty = "certificationNumber="+certificationNumber;
         String emailProperty = "email="+email;
-        return String.format(
-                "%s:%s/member/signup/complete?%s&%s",
-                domain, port, certificationNumberProperty, emailProperty
+        String signupMail = String.format(
+                "%s/member/signup/complete?%s&%s",
+                baseURL, certificationNumberProperty, emailProperty
         );
+
+        return "<!DOCTYPE>" +
+                "<html>" +
+                    "<body>" +
+                        "<h3>아래의 링크에 들어가 회원가입을 완료해주세요.</h3>" +
+                        "<a href="+signupMail+">회원가입 완료</a>" +
+                    "</body>" +
+                "</html>";
     }
 
     private void validateEmail(String email) {
