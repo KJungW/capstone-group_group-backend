@@ -3,6 +3,7 @@ package capstone.letcomplete.group_group.service;
 import capstone.letcomplete.group_group.dto.input.LoginInput;
 import capstone.letcomplete.group_group.dto.logic.JwtClaimsDataDto;
 import capstone.letcomplete.group_group.dto.logic.MemberInfoDto;
+import capstone.letcomplete.group_group.dto.output.LoginMemberOutput;
 import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.enumtype.AccountType;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
@@ -20,7 +21,7 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtUtil jwtUtil;
 
-    public String login(LoginInput loginInput) {
+    public LoginMemberOutput login(LoginInput loginInput) {
         // 이메일을 가지고 해당하는 회원정보를 가져온다.
         Member findMember = memberService.findByEmail(loginInput.getEmail());
 
@@ -30,7 +31,9 @@ public class AuthService {
         }
 
         // Access Token 생성
-        return jwtUtil.makeAccessToken(new JwtClaimsDataDto(
+        String jwtToken = jwtUtil.makeAccessToken(new JwtClaimsDataDto(
                 findMember.getId(), findMember.getEmail(), AccountType.MEMBER));
+
+        return new LoginMemberOutput(findMember, jwtToken);
     }
 }

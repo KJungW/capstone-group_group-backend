@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.controller;
 
 import capstone.letcomplete.group_group.dto.input.LoginInput;
+import capstone.letcomplete.group_group.dto.output.LoginMemberOutput;
 import capstone.letcomplete.group_group.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,7 +23,8 @@ public class AuthController {
 
     @PostMapping("login")
     @Operation(summary = "Member Login", description = "일반 회원 로그인")
-    public String login(@Valid @RequestBody LoginInput loginInput) {
+    public LoginMemberOutput login(@Valid @RequestBody LoginInput loginInput) {
+
         return authService.login(loginInput);
     }
 }
