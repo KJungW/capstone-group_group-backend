@@ -1,5 +1,6 @@
 package capstone.letcomplete.group_group.service;
 
+import capstone.letcomplete.group_group.dto.output.GetBoardListInCampusOutput;
 import capstone.letcomplete.group_group.entity.Board;
 import capstone.letcomplete.group_group.entity.Campus;
 import capstone.letcomplete.group_group.exception.DataNotFoundException;
@@ -27,5 +28,9 @@ public class BoardService {
         return boardRepository.findById(id).orElseThrow(
                 ()->new DataNotFoundException("ID에 해당하는 게시판이 존재하지 않습니다.")
         );
+    }
+
+    public GetBoardListInCampusOutput findByCampus(Long campusId) {
+        return new GetBoardListInCampusOutput(boardRepository.findByCampusId(campusId));
     }
 }
