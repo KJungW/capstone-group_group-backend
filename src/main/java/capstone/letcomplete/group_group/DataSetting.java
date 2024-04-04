@@ -95,8 +95,14 @@ public class DataSetting {
         boardService.createBoard(campusId, "조별과제/캡스톤$인문예술");
         boardService.createBoard(campusId, "조별과제/캡스톤$사회과학");
         boardService.createBoard(campusId, "조별과제/캡스톤$디자인");
-        boardService.createBoard(campusId, "대회/공모전");
-        boardService.createBoard(campusId, "스터디");
+        boardService.createBoard(campusId, "대회/공모전$IT공과");
+        boardService.createBoard(campusId, "대회/공모전$인문예술");
+        boardService.createBoard(campusId, "대회/공모전$사회과학");
+        boardService.createBoard(campusId, "대회/공모전$디자인");
+        boardService.createBoard(campusId, "스터디$IT공과");
+        boardService.createBoard(campusId, "스터디$인문예술");
+        boardService.createBoard(campusId, "스터디$사회과학");
+        boardService.createBoard(campusId, "스터디$디자인");
 
         // 모집글추가
         for(int i=0;i<30;i++) {
