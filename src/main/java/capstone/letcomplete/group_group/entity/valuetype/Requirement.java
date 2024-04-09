@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Requirement {
+    private String id;
     private String title;
     private RequirementResultType resultType;
 }

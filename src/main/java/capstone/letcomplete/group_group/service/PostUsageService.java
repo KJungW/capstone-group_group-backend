@@ -12,12 +12,12 @@ import capstone.letcomplete.group_group.entity.RequirementsForm;
 import capstone.letcomplete.group_group.entity.valuetype.Requirement;
 import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -69,7 +69,7 @@ public class PostUsageService {
 
     private List<Requirement> makeRequirementsByInput(List<CreateRequirementInput> requirementInputList) {
         return requirementInputList.stream()
-                .map((input) -> new Requirement(input.getTitle(), input.getResultType()))
+                .map((input) -> new Requirement(UUID.randomUUID().toString(), input.getTitle(), input.getResultType()))
                 .toList();
     }
 
@@ -80,7 +80,7 @@ public class PostUsageService {
     private List<GetRequirementOutput> makeRequirementOutputsByForm(RequirementsForm form) throws JsonProcessingException {
         List<Requirement> requirements = jsonUtil.convertJsonToList(form.getRequirements(), Requirement.class);
         return requirements.stream()
-                .map(requirement -> new GetRequirementOutput(requirement.getTitle(), requirement.getResultType()))
+                .map(requirement -> new GetRequirementOutput(requirement.getId(), requirement.getTitle(), requirement.getResultType()))
                 .toList();
     }
 
