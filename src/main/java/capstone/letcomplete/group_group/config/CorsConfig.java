@@ -12,8 +12,8 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedHeader("*");
+        configuration.addAllowedOriginPattern("*"); // configuration.setAllowCredentials(true)일 경우 addAllowedOrigin("*") 대신 addAllowedOriginPattern("*") 사용
+        configuration.addAllowedHeader("*");   
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
 
