@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.service;
 
 import capstone.letcomplete.group_group.dto.logic.FileUploadResultDto;
+import capstone.letcomplete.group_group.dto.logic.OrdinalFileUploadResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -63,11 +64,12 @@ public class S3Service {
     /*
      * 여러 파일 업로드
      */
-    public List<FileUploadResultDto> uploadFiles(List<MultipartFile> files, String directoryPath) throws IOException {
+    public List<OrdinalFileUploadResultDto> uploadFiles(List<MultipartFile> files, String directoryPath) throws IOException {
         try {
-            List<FileUploadResultDto> resultDto = new ArrayList<>();
-            for (MultipartFile file : files) {
-                resultDto.add(uploadFile(file, directoryPath));
+            List<OrdinalFileUploadResultDto> resultDto = new ArrayList<>();
+            for (int i = 0; i < files.size(); i++) {
+                FileUploadResultDto fileUploadResultDto = uploadFile(files.get(i), directoryPath);
+                resultDto.add(new OrdinalFileUploadResultDto((long) i, fileUploadResultDto));
             }
             return resultDto;
         } catch (IOException exception) {
