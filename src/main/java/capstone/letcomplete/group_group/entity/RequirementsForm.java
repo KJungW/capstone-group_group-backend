@@ -17,7 +17,7 @@ public class RequirementsForm extends BaseEntity {
     @JoinColumn(name="POST_ID", nullable = false)
     private Post post;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "JSON")
     private String requirements;
     
     public static RequirementsForm makeRequirementsForm(
