@@ -17,7 +17,7 @@ public class RequirementsFormResult extends BaseEntity {
     @JoinColumn(name="REQUIREMENTS_FORM_ID", nullable = false)
     private RequirementsForm targetForm;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "JSON")
     private String requirementResults;
 
     public static RequirementsFormResult makeRequirementsFormResult(
