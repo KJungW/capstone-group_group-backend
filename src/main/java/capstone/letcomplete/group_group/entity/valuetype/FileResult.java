@@ -7,10 +7,12 @@ import lombok.Getter;
 public class FileResult extends RequirementResult{
     private String externalName;
     private String internalName;
+    private String url;
 
-    public FileResult(RequirementResultType type, String externalName, String internalName) {
-        super(type);
+    public FileResult(String externalName, String internalName, String url) {
+        super(RequirementResultType.FILE);
         this.externalName = externalName;
         this.internalName = internalName;
+        this.url = url;
     }
 }
