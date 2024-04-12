@@ -4,9 +4,11 @@ import capstone.letcomplete.group_group.entity.Campus;
 import capstone.letcomplete.group_group.exception.DataNotFoundException;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.repository.CampusRepository;
+import capstone.letcomplete.group_group.value.DefaultData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +36,10 @@ public class CampusService {
 
     public void checkCampusExistence(Long id) {
         findById(id);
+    }
+
+    public Campus findDefaultCampus() {
+        return campusRepository.findByName(DefaultData.defaultCampusName).orElseThrow(
+                () -> new InvalidInputException("디폴트 캠퍼스에 해당하는 데이터가 없습니다."));
     }
 }

@@ -10,6 +10,7 @@ import capstone.letcomplete.group_group.entity.enumtype.PassionSize;
 import capstone.letcomplete.group_group.entity.enumtype.RequirementResultType;
 import capstone.letcomplete.group_group.repository.ManagerRepository;
 import capstone.letcomplete.group_group.service.*;
+import capstone.letcomplete.group_group.value.DefaultData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,7 @@ public class DataSetting {
         );
 
         // 초기 대학교 추가
-        Long campusId = createInitCampus("한성대학교");
+        Long campusId = createInitCampus(DefaultData.defaultCampusName);
         
         // 초기 일반회원 계정추가
         Long member0 = createInitMember(

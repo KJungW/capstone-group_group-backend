@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.controller;
 
 import capstone.letcomplete.group_group.dto.output.GetBoardListInCampusOutput;
+import capstone.letcomplete.group_group.dto.output.GetDefaultCampusIdOutput;
 import capstone.letcomplete.group_group.dto.output.SaveCampusOutput;
 import capstone.letcomplete.group_group.service.BoardService;
 import capstone.letcomplete.group_group.service.CampusService;
@@ -38,6 +39,13 @@ public class CampusController {
             @Schema(description = "게시판들을 조회할때 사용할 캠퍼스ID") @Min(value = 0) @RequestParam("campusId") Long campusId
     ) {
         return boardService.findByCampus(campusId);
+    }
+
+    @GetMapping("default")
+    @Operation(summary = "Get Default Campus Id", description = "디폴트 캠퍼스의 ID조회")
+    public GetDefaultCampusIdOutput getDefaultCampusId() {
+        Long id = campusService.findDefaultCampus().getId();
+        return new GetDefaultCampusIdOutput(id);
     }
 
 }
