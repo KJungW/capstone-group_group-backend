@@ -10,8 +10,8 @@ import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.exception.SignupLogicException;
 import capstone.letcomplete.group_group.repository.JoinCacheRedisRepository;
 import capstone.letcomplete.group_group.repository.MemberRepository;
+import capstone.letcomplete.group_group.util.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class MemberService {
     private final MailSendService mailSendService;
     private final JoinCacheRedisRepository joinCacheRedisRepository;
     private final Environment env;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JwtUtil jwtUtil;
 
     @Transactional()
     public void signupStart(SignupMemberInput input) throws MessagingException {
@@ -140,5 +140,12 @@ public class MemberService {
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("id에 해당하는 회원이 없습니다."));
+    }
+
+    public Member findByToken(String jwtToken) {
+        if(!jwtUtil.validateToken(jwtToken))
+            throw new InvalidInputException("유효하지 않은 토큰입니다.");
+        Long id = jwtUtil.getIdFromToken(jwtToken);
+        return findById(id);
     }
 }

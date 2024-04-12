@@ -1,7 +1,9 @@
 package capstone.letcomplete.group_group.controller;
 
+import capstone.letcomplete.group_group.dto.input.FindMemberByTokenInput;
 import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
-import capstone.letcomplete.group_group.dto.output.SignupOutput;
+import capstone.letcomplete.group_group.dto.output.FindMemberByTokenOutput;
+import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +33,18 @@ public class MemberController {
     )  {
         memberService.signupComplete(email, certificationNumber);
         return "회원가입이 완료되었습니다. 홈페이지로 돌아가서 로그인을 해주세요";
+    }
+
+    @PostMapping("/token")
+    @Operation(summary = "Find Member By Token", description = "토큰을 통해 Member정보를 조회하는 API")
+    public FindMemberByTokenOutput findMemberByToken(
+            @Valid @RequestBody FindMemberByTokenInput input
+    ) {
+        Member member = memberService.findByToken(input.getToken());
+        return new FindMemberByTokenOutput(
+                member.getId(), member.getEmail(),
+                member.getNickName(), input.getToken(),
+                member.getCampus().getId());
     }
 
 }
