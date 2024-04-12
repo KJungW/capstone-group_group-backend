@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,8 +35,12 @@ public class CampusController {
     @GetMapping("/boards")
     @Operation(summary = "Get Boards In Campus", description = "캠퍼스에 속하는 모든 게시판 조회")
     public GetBoardListInCampusOutput getBoardListInCampus(
-            @Schema(description = "게시판들을 조회할때 사용할 캠퍼스ID") @Min(value = 0) @RequestParam("campusId") Long campusId
+            @Schema(description = "게시판들을 조회할때 사용할 캠퍼스ID")
+            @RequestParam(value="campusId", required = false) Long campusId
     ) {
+        if(campusId == null) {
+            campusId = campusService.findDefaultCampus().getId();
+        }
         return boardService.findByCampus(campusId);
     }
 

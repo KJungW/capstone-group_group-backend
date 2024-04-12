@@ -10,6 +10,8 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class GetBoardListInCampusOutput {
+    @Schema(description = "캠퍼스 id")
+    private Long campusId;
     @Schema(description = "캠퍼스에 속한 모든 게시판")
     private List<BoardOverviewDto> content;
 }
