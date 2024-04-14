@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.service;
 
 import capstone.letcomplete.group_group.dto.logic.PostOverViewDto;
+import capstone.letcomplete.group_group.dto.logic.PostOverViewsInBoard;
 import capstone.letcomplete.group_group.dto.output.GetPostsInBoardOutput;
 import capstone.letcomplete.group_group.entity.Post;
 import capstone.letcomplete.group_group.exception.DataNotFoundException;
@@ -30,10 +31,10 @@ public class PostService {
         );
     }
 
-    public GetPostsInBoardOutput findPostOverViewInBoard(int pageNumber, int pageSize, Long boardId) {
+    public PostOverViewsInBoard findPostOverViewInBoard(int pageNumber, int pageSize, Long boardId) {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
         Page<PostOverViewDto> result = postRepository.findPostsInBoard(boardId, pageRequest);
-        return new GetPostsInBoardOutput(result.getContent(), result.getTotalPages(), result.getNumber(), result.isLast(), result.isFirst());
+        return new PostOverViewsInBoard(result.getContent(), result.getTotalPages(), result.getNumber(), result.isLast(), result.isFirst());
     }
 
 }
