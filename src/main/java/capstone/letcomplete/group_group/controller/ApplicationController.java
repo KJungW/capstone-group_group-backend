@@ -6,6 +6,7 @@ import capstone.letcomplete.group_group.service.ApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
     @Operation(summary = "Add Application", description = "모집글에 대한 신청")
     public SaveApplicationOutput saveApplication(
             @RequestPart("applicationData") SaveApplicationInput input,

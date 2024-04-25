@@ -7,8 +7,8 @@ import lombok.Getter;
 public class TextResult extends RequirementResult{
     private String title;
 
-    public TextResult(String title) {
-        super(RequirementResultType.TEXT);
+    public TextResult(String requirementId, String title) {
+        super(requirementId, RequirementResultType.TEXT);
         this.title = title;
     }
 }

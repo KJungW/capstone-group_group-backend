@@ -7,5 +7,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RequirementResult {
+    private String requirementId;
     private RequirementResultType type;
 }

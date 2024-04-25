@@ -3,6 +3,7 @@ package capstone.letcomplete.group_group.service;
 import capstone.letcomplete.group_group.dto.input.SaveApplicationInput;
 import capstone.letcomplete.group_group.dto.logic.FileUploadResultDto;
 import capstone.letcomplete.group_group.dto.logic.OrdinalFileUploadResultDto;
+import capstone.letcomplete.group_group.dto.logic.RequirementFileResultInputDto;
 import capstone.letcomplete.group_group.dto.logic.SaveRequirementResultInput;
 import capstone.letcomplete.group_group.entity.RequirementsForm;
 import capstone.letcomplete.group_group.entity.RequirementsFormResult;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -69,24 +71,24 @@ public class RequirementsFormResultService {
 
         // - text 타입일 경우 처리
         for (SaveRequirementResultInput textTypeInput : textTypeList) {
-            requirementResultList.add(new TextResult(textTypeInput.getContent()));
+            requirementResultList.add(new TextResult(textTypeInput.getRequirementId(), textTypeInput.getContent()));
         }
 
         // - file 타입일 경우 처리
-        List<MultipartFile> ordinalInputFiles =
-                fileTypeList.stream()
-                .map(
-                        requirementResultInput -> inputFiles.stream()
-                                .filter(file -> file.getOriginalFilename().equals(requirementResultInput.getContent()))
-                                .findFirst().get()
-                )
-                .toList();
-        String fileUploadDir = input.getApplicantId().toString() + targetForm.getId();
+        List<RequirementFileResultInputDto> requirementFileResultInputs = fileTypeList.stream().map(requirementResultInput -> {
+                    MultipartFile matchingFile = inputFiles.stream().filter(file -> file.getOriginalFilename().equals(requirementResultInput.getContent())).findFirst().get();
+                    return new RequirementFileResultInputDto(requirementResultInput.getRequirementId(), matchingFile);
+                }).toList();
+        List<MultipartFile> ordinalInputFiles = requirementFileResultInputs.stream().map(
+                requirementFileResultInput -> requirementFileResultInput.getFileResult()).collect(Collectors.toList());
+        String fileUploadDir = input.getApplicantId().toString() + "-" + targetForm.getId();
         List<OrdinalFileUploadResultDto> fileUploadResultDtos = s3Service.uploadFiles(ordinalInputFiles, fileUploadDir);
-        for (int i = 0; i < fileUploadResultDtos.size(); i++) {
+        for (int i = 0; i < requirementFileResultInputs.size(); i++) {
+            String requirementId = requirementFileResultInputs.get(i).getRequirementId();
             FileUploadResultDto fileUploadResultDto = fileUploadResultDtos.get(i).getFileUploadResult();
             requirementResultList.add(
                     new FileResult(
+                            requirementId,
                             fileUploadResultDto.getServerFileName(),
                             fileUploadResultDto.getOriginFileName(),
                             fileUploadResultDto.getUploadUrl()
