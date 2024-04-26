@@ -1,6 +1,5 @@
 package capstone.letcomplete.group_group.dto.input;
 
-import capstone.letcomplete.group_group.dto.logic.SaveRequirementResultInput;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

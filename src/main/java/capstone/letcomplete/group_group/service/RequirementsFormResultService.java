@@ -1,16 +1,13 @@
 package capstone.letcomplete.group_group.service;
 
 import capstone.letcomplete.group_group.dto.input.SaveApplicationInput;
-import capstone.letcomplete.group_group.dto.logic.FileUploadResultDto;
-import capstone.letcomplete.group_group.dto.logic.OrdinalFileUploadResultDto;
-import capstone.letcomplete.group_group.dto.logic.RequirementFileResultInputDto;
-import capstone.letcomplete.group_group.dto.logic.SaveRequirementResultInput;
+import capstone.letcomplete.group_group.dto.input.SaveRequirementResultInput;
+import capstone.letcomplete.group_group.dto.logic.*;
 import capstone.letcomplete.group_group.entity.RequirementsForm;
 import capstone.letcomplete.group_group.entity.RequirementsFormResult;
 import capstone.letcomplete.group_group.entity.enumtype.RequirementResultType;
 import capstone.letcomplete.group_group.entity.valuetype.FileResult;
 import capstone.letcomplete.group_group.entity.valuetype.Requirement;
-import capstone.letcomplete.group_group.entity.valuetype.RequirementResult;
 import capstone.letcomplete.group_group.entity.valuetype.TextResult;
 import capstone.letcomplete.group_group.exception.DataNotFoundException;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
@@ -54,9 +51,6 @@ public class RequirementsFormResultService {
         }
         
         // RequirementsFormResult.requirementResultList 데이터 준비
-        // - 최종 결과물을 담을 변수 준비
-        List<RequirementResult> requirementResultList = new ArrayList<>();
-
         // - 타입별로 SaveRequirementResultInput을 분리
         List<SaveRequirementResultInput> textTypeList =
                 input.getRequirementResultList()
@@ -70,23 +64,28 @@ public class RequirementsFormResultService {
                         .toList();
 
         // - text 타입일 경우 처리
+        List<TextResult> textResults = new ArrayList<>();
         for (SaveRequirementResultInput textTypeInput : textTypeList) {
-            requirementResultList.add(new TextResult(textTypeInput.getRequirementId(), textTypeInput.getContent()));
+            textResults.add(new TextResult(textTypeInput.getRequirementId(), textTypeInput.getContent()));
         }
 
         // - file 타입일 경우 처리
-        List<RequirementFileResultInputDto> requirementFileResultInputs = fileTypeList.stream().map(requirementResultInput -> {
+            // - 입력된 파일리스트와 파일을 요구하는 참여요건의 ID를 매핑
+        List<RequirementFileResultData> requirementFileResultInputs = fileTypeList.stream().map(requirementResultInput -> {
                     MultipartFile matchingFile = inputFiles.stream().filter(file -> file.getOriginalFilename().equals(requirementResultInput.getContent())).findFirst().get();
-                    return new RequirementFileResultInputDto(requirementResultInput.getRequirementId(), matchingFile);
+                    return new RequirementFileResultData(requirementResultInput.getRequirementId(), matchingFile);
                 }).toList();
+            // - 파일 업로드
         List<MultipartFile> ordinalInputFiles = requirementFileResultInputs.stream().map(
                 requirementFileResultInput -> requirementFileResultInput.getFileResult()).collect(Collectors.toList());
         String fileUploadDir = input.getApplicantId().toString() + "-" + targetForm.getId();
         List<OrdinalFileUploadResultDto> fileUploadResultDtos = s3Service.uploadFiles(ordinalInputFiles, fileUploadDir);
+            // - DB에 저장할 file타입 제출물들에 대한 데이터리스트를 생성
+        List<FileResult> fileResults = new ArrayList<>();
         for (int i = 0; i < requirementFileResultInputs.size(); i++) {
             String requirementId = requirementFileResultInputs.get(i).getRequirementId();
             FileUploadResultDto fileUploadResultDto = fileUploadResultDtos.get(i).getFileUploadResult();
-            requirementResultList.add(
+            fileResults.add(
                     new FileResult(
                             requirementId,
                             fileUploadResultDto.getServerFileName(),
@@ -96,13 +95,18 @@ public class RequirementsFormResultService {
             );
         }
 
-        // - requirementResults를 json으로 인코딩
-        String jsonRequirementResults = jsonUtil.convertObjectToJson(requirementResultList);
-
-        // RequirementsFormResult DB저장
+        // - DB에 저장할 전체 제출물 데이터 객체 생성
+        AllRequirementResultsInJson allResult = new AllRequirementResultsInJson(textResults, fileResults);
+        // - 전체 제출물 데이터를 JSON으로 인코딩
+        String jsonRequirementResults = jsonUtil.convertObjectToJson(allResult);
+        // - DE저장
         RequirementsFormResult newFormResult = RequirementsFormResult.makeRequirementsFormResult(targetForm, jsonRequirementResults);
         formResultRepository.save(newFormResult);
         return newFormResult.getId();
+    }
+
+    public AllRequirementResultsInJson convertJsonToRequirementResults (String jsonData) throws JsonProcessingException {
+        return jsonUtil.convertJsonToObject(jsonData, AllRequirementResultsInJson.class);
     }
 
     public RequirementsFormResult findById(Long id) {
