@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.dto.output;
 
 import capstone.letcomplete.group_group.dto.logic.ApplicationOverviewDto;
+import capstone.letcomplete.group_group.entity.enumtype.ApplicationState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +10,7 @@ import lombok.Getter;
 public class ApplicationOverViewOutput {
     private Long applicationId;
     private String applicantNickName;
-    private Boolean applicationIsPassed;
+    private ApplicationState applicationIsPassed;
 
     public ApplicationOverViewOutput (ApplicationOverviewDto dto) {
         this.applicationId = dto.getApplicationId();

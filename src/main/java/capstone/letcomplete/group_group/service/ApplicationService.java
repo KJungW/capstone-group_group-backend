@@ -3,6 +3,7 @@ package capstone.letcomplete.group_group.service;
 import capstone.letcomplete.group_group.dto.input.SaveApplicationInput;
 import capstone.letcomplete.group_group.dto.logic.*;
 import capstone.letcomplete.group_group.entity.*;
+import capstone.letcomplete.group_group.entity.enumtype.ApplicationState;
 import capstone.letcomplete.group_group.entity.enumtype.RequirementResultType;
 import capstone.letcomplete.group_group.entity.valuetype.FileResult;
 import capstone.letcomplete.group_group.entity.valuetype.Requirement;
@@ -41,7 +42,7 @@ public class ApplicationService {
         RequirementsFormResult formResult = requirementsFormResultService.findById(formResultId);
 
         // Application 저장
-        Application newApplication = Application.makeApplication(post, member, false, formResult);
+        Application newApplication = Application.makeApplication(post, member, ApplicationState.YET, formResult);
         applicationRepository.save(newApplication);
 
         return newApplication.getId();
@@ -86,7 +87,7 @@ public class ApplicationService {
 
         return new ApplicationDetailDto(
                 application.getId(), application.getPost().getId(),
-                application.getApplicant().getId(), application.isPassed(),
+                application.getApplicant().getId(), application.getIsPassed(),
                 requirementDataList
         );
     }

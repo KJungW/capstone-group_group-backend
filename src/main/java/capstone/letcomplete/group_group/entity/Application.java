@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.entity;
 
 import capstone.letcomplete.group_group.entity.auditing.BaseEntity;
+import capstone.letcomplete.group_group.entity.enumtype.ApplicationState;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,21 +23,22 @@ public class Application extends BaseEntity {
     private Member applicant;
 
     @Column(nullable = false)
-    private boolean isPassed;
+    @Enumerated(value = EnumType.STRING)
+    private ApplicationState isPassed;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="REQUIREMENT_FORM_RESULT_ID", nullable = false)
     private RequirementsFormResult requirementsFormResult;
 
     public static Application makeApplication(
-            Post post, Member applicant, Boolean isPassed,
+            Post post, Member applicant, ApplicationState isPassed,
             RequirementsFormResult requirementsFormResult
     ) {
-        Application appilcation = new Application();
-        appilcation.post = post;
-        appilcation.applicant = applicant;
-        appilcation.isPassed = isPassed;
-        appilcation.requirementsFormResult = requirementsFormResult;
-        return appilcation;
+        Application application = new Application();
+        application.post = post;
+        application.applicant = applicant;
+        application.isPassed = isPassed;
+        application.requirementsFormResult = requirementsFormResult;
+        return application;
     }
 }

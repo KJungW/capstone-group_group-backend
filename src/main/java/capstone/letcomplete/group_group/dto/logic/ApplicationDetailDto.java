@@ -1,5 +1,6 @@
 package capstone.letcomplete.group_group.dto.logic;
 
+import capstone.letcomplete.group_group.entity.enumtype.ApplicationState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,6 +13,6 @@ public class ApplicationDetailDto {
     private Long applicationId;
     private Long postId;
     private Long applicant;
-    private boolean isPassed;
+    private ApplicationState isPassed;
     private List<RequirementData> requirementDataList = new ArrayList<>();
 }
