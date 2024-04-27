@@ -41,4 +41,8 @@ public class Application extends BaseEntity {
         application.requirementsFormResult = requirementsFormResult;
         return application;
     }
+
+    public void changeApplicationState(ApplicationState state) {
+        this.isPassed = state;
+    }
 }

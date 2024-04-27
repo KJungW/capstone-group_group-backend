@@ -9,6 +9,7 @@ import capstone.letcomplete.group_group.entity.valuetype.FileResult;
 import capstone.letcomplete.group_group.entity.valuetype.Requirement;
 import capstone.letcomplete.group_group.entity.valuetype.TextResult;
 import capstone.letcomplete.group_group.exception.DataNotFoundException;
+import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.repository.ApplicationRepository;
 import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -113,5 +115,23 @@ public class ApplicationService {
             result.add(new ApplicationOverviewsInPostDto(key, applicationOverviewList));
         }
         return result;
+    }
+
+    @Transactional
+    public Long updateApplicationState(Long memberId, Long applicationId, ApplicationState applicationState) {
+        // 상태를 변경시킬 신청데이터 조회
+        Application application = findById(applicationId);
+
+        // 신청데이터가 타겟으로 하는 모집글이 현재 사용자의 모집글이 맞는지 체크
+        if(!application.getPost().getWriter().getId().equals(memberId))
+            throw new InvalidInputException("현재 사용자가 작성한 모집글에 대한 신청이 아닙니다.");
+
+        // 이미 수락/거부로 상태변경이 완료된 신청데이터인지 체크
+        if(application.getIsPassed() != ApplicationState.YET)
+            throw new InvalidInputException("이미 수락/거부로 상태가 변경된 신청입니다.");
+
+        // 상태변경
+        application.changeApplicationState(applicationState);
+        return application.getId();
     }
 }

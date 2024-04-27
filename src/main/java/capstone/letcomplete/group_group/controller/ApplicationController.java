@@ -4,6 +4,8 @@ import capstone.letcomplete.group_group.dto.input.SaveApplicationInput;
 import capstone.letcomplete.group_group.dto.logic.ApplicationDetailDto;
 import capstone.letcomplete.group_group.dto.output.GetApplicationDetailOutput;
 import capstone.letcomplete.group_group.dto.output.SaveApplicationOutput;
+import capstone.letcomplete.group_group.dto.output.UpdateApplicationStateOutput;
+import capstone.letcomplete.group_group.entity.enumtype.ApplicationState;
 import capstone.letcomplete.group_group.service.ApplicationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,5 +48,18 @@ public class ApplicationController {
         Long memberId = Long.valueOf(userDetails.getUsername());
         ApplicationDetailDto applicationDetail = applicationService.findApplicationDetail(memberId, applicationId);
         return new GetApplicationDetailOutput(applicationDetail);
+    }
+
+    @PostMapping("/state")
+    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @Operation(summary = "Update Application State", description = "신청 수락/거부")
+    public UpdateApplicationStateOutput updateApplicationState(
+            @RequestParam("applicationId") Long applicationId,
+            @RequestParam("applicationState")ApplicationState applicationState
+    ) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        Long updatedApplicationId = applicationService.updateApplicationState(memberId, applicationId, applicationState);
+        return new UpdateApplicationStateOutput(updatedApplicationId);
     }
 }
