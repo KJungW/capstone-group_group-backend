@@ -2,14 +2,20 @@ package capstone.letcomplete.group_group.controller;
 
 import capstone.letcomplete.group_group.dto.input.FindMemberByTokenInput;
 import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
+import capstone.letcomplete.group_group.dto.logic.PostAndApplicationsDto;
 import capstone.letcomplete.group_group.dto.output.FindMemberByTokenOutput;
+import capstone.letcomplete.group_group.dto.output.GetPostAndApplicationsByMemberOutput;
 import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.service.MemberService;
+import capstone.letcomplete.group_group.service.PostUsageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name="Member", description = "Member 관련 API")
 public class MemberController {
     private final MemberService memberService;
+    private final PostUsageService postUsageService;
 
     @PostMapping("/signup")
     @Operation(summary = "Signup Start", description = "일반 회원(Member)에 대한 회원가입을 인증메일을 요청하는 API")
@@ -45,6 +52,19 @@ public class MemberController {
                 member.getId(), member.getEmail(),
                 member.getNickName(), input.getToken(),
                 member.getCampus().getId());
+    }
+
+    @GetMapping("/posts")
+    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @Operation(summary = "Get PostOverView List By MemberID", description = "회원ID를 통해 회원이 작성한 모집글 리스트를 조회")
+    public GetPostAndApplicationsByMemberOutput getPostAndApplicationByMember(
+            @RequestParam("sliceNum") int sliceNum,
+            @RequestParam("sliceSize") int sliceSize
+    ) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        PostAndApplicationsDto postAndApplicationsByMember = postUsageService.findPostAndApplicationsByMember(sliceNum, sliceSize, memberId);
+        return new GetPostAndApplicationsByMemberOutput(postAndApplicationsByMember);
     }
 
 }

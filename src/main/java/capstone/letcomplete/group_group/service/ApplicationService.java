@@ -1,9 +1,7 @@
 package capstone.letcomplete.group_group.service;
 
 import capstone.letcomplete.group_group.dto.input.SaveApplicationInput;
-import capstone.letcomplete.group_group.dto.logic.AllRequirementResultsInJson;
-import capstone.letcomplete.group_group.dto.logic.ApplicationDetailDto;
-import capstone.letcomplete.group_group.dto.logic.RequirementData;
+import capstone.letcomplete.group_group.dto.logic.*;
 import capstone.letcomplete.group_group.entity.*;
 import capstone.letcomplete.group_group.entity.enumtype.RequirementResultType;
 import capstone.letcomplete.group_group.entity.valuetype.FileResult;
@@ -21,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -97,5 +97,20 @@ public class ApplicationService {
         );
     }
 
+    public List<ApplicationOverviewsInPostDto> findApplicationOverViewsByPosts(List<Long> postIdList) {
+        // postIdList에 속하는 모든 신청데이터 리스트 조회
+        List<ApplicationOverviewDto> applicationsInPosts = applicationRepository.findApplicationsInPosts(postIdList);
+        
+        // postId에 따라 신청데이터 리스트 그루핑
+        Map<Long, List<ApplicationOverviewDto>> groupingById = applicationsInPosts.stream()
+                .collect(Collectors.groupingBy(ApplicationOverviewDto::getPostId));
 
+        // 데이터 재구성
+        List<ApplicationOverviewsInPostDto> result = new ArrayList<>();
+        for(Long key :groupingById.keySet()) {
+            List<ApplicationOverviewDto> applicationOverviewList = groupingById.get(key);
+            result.add(new ApplicationOverviewsInPostDto(key, applicationOverviewList));
+        }
+        return result;
+    }
 }

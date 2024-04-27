@@ -3,6 +3,7 @@ package capstone.letcomplete.group_group.service;
 import capstone.letcomplete.group_group.dto.entitymake.MakePostDto;
 import capstone.letcomplete.group_group.dto.input.CreatePostInput;
 import capstone.letcomplete.group_group.dto.input.CreateRequirementInput;
+import capstone.letcomplete.group_group.dto.logic.*;
 import capstone.letcomplete.group_group.dto.output.GetPostDetailOutput;
 import capstone.letcomplete.group_group.dto.output.GetRequirementOutput;
 import capstone.letcomplete.group_group.entity.Board;
@@ -16,8 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,6 +30,7 @@ public class PostUsageService {
     private final RequirementsFormService formService;;
     private final BoardService boardService;
     private final MemberService memberService;
+    private final ApplicationService applicationService;
     private final JsonUtil jsonUtil;
 
     @Transactional
@@ -82,6 +86,37 @@ public class PostUsageService {
         return requirements.stream()
                 .map(requirement -> new GetRequirementOutput(requirement.getId(), requirement.getTitle(), requirement.getResultType()))
                 .toList();
+    }
+
+    public PostAndApplicationsDto findPostAndApplicationsByMember(int sliceNum, int sliceSize, Long memberId) {
+        // 현재 멤버가 작성한 모든 모집글 리스트 조회
+        PostOverViewsInMemberDto postOverViewInMember = postService.findPostOverViewInMember(sliceNum, sliceSize, memberId);
+
+        // 모집글마다의 신청 리스트 조회
+        List<Long> postIdList = postOverViewInMember.getContents().stream()
+                .map(PostOverViewDto::getId)
+                .collect(Collectors.toList());
+        List<ApplicationOverviewsInPostDto> applicationOverViewsByPosts = applicationService.findApplicationOverViewsByPosts(postIdList);
+
+        // 데이터 재구성
+        List<PostAndApplicationsOverviewDto> postAndApplicationsOverviewList= new ArrayList<>();
+        for (PostOverViewDto postOverView : postOverViewInMember.getContents()) {
+            PostAndApplicationsOverviewDto postAndApplicationsOverview = new PostAndApplicationsOverviewDto(
+                    postOverView.getId(),
+                    postOverView.getTitle(),
+                    postOverView.getCreateDate(),
+                    new ArrayList<>()
+            );
+            for(ApplicationOverviewsInPostDto applicationOverViews :applicationOverViewsByPosts) {
+                if(postOverView.getId().equals(applicationOverViews.getPostId())) {
+                    postAndApplicationsOverview.changeApplicationOverViewList(applicationOverViews.getApplicationOverviewDtoList());
+                    break;
+                }
+            }
+            postAndApplicationsOverviewList.add(postAndApplicationsOverview);
+        }
+
+        return new PostAndApplicationsDto(postAndApplicationsOverviewList, postOverViewInMember.getSliceNum(), postOverViewInMember.isFirst(), postOverViewInMember.isLast(), postOverViewInMember.isHasNext());
     }
 
 }
