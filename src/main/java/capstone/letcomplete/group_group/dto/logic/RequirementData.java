@@ -11,4 +11,5 @@ public class RequirementData {
     private String requirementTitle;
     private RequirementResultType resultType;
     private String content;
+    private String internalFileName; // 파일타입일 경우에만 데이터를 넣는다.
 }

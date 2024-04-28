@@ -78,14 +78,14 @@ public class ApplicationService {
                         .findFirst().orElseThrow(()->new IllegalStateException("참여요건ID에 해당하는 제출물이 없음"));
                 requirementDataList.add(new RequirementData(
                         matchingFileResult.getRequirementId(), requirement.getTitle(),
-                        matchingFileResult.getType(), matchingFileResult.getUrl()));
+                        matchingFileResult.getType(), matchingFileResult.getUrl(), matchingFileResult.getInternalName()));
             } else {
                 TextResult matchingTextResult = textResults.stream()
                         .filter(textResult -> requirement.getId().equals(textResult.getRequirementId()))
                         .findFirst().orElseThrow(()->new IllegalStateException("참여요건ID에 해당하는 제출물이 없음"));
                 requirementDataList.add(new RequirementData(
                         matchingTextResult.getRequirementId(), requirement.getTitle(),
-                        matchingTextResult.getType(), matchingTextResult.getContent()));
+                        matchingTextResult.getType(), matchingTextResult.getContent(), null));
             }
         }
 

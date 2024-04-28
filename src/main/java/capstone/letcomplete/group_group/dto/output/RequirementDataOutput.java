@@ -12,12 +12,14 @@ public class RequirementDataOutput {
     private String requirementTitle;
     private RequirementResultType resultType;
     private String content;
+    private String fileName;
 
     public RequirementDataOutput(RequirementData dto) {
         this.requirementId = dto.getRequirementId();
         this.resultType = dto.getResultType();
         this.content = dto.getContent();
         this.requirementTitle = dto.getRequirementTitle();
+        this.fileName = dto.getInternalFileName();
     }
 
 }
