@@ -10,8 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ApplicationsByMemberDto {
     private List<ApplicationAndResultDto> applicationAndResultList = new ArrayList<>();
-    private int sliceNum;
-    private boolean isFirst;
-    private boolean isLast;
-    private boolean hasNext;
+    private int totalPages;
+    private int currentPageNumber;
+    private boolean isLastPage;
+    private boolean isFirstPage;
 }

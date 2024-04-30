@@ -75,12 +75,12 @@ public class MemberController {
     @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
     @Operation(summary = "Get Application List By Member", description = "회원ID를 통해 회원이 작성한 신청리스트 조회")
     public GetApplicationsByMemberOutput getApplicationsByMember(
-            @RequestParam("sliceNum") int sliceNum,
-            @RequestParam("sliceSize") int sliceSize
+            @RequestParam("pageNumber") int pageNumber,
+            @RequestParam("pageSize") int pageSize
     ) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long memberId = Long.valueOf(userDetails.getUsername());
-        ApplicationsByMemberDto result = applicationService.findApplicationsByMember(sliceNum, sliceSize, memberId);
+        ApplicationsByMemberDto result = applicationService.findApplicationsByMember(pageNumber, pageSize, memberId);
         return new GetApplicationsByMemberOutput(result);
     }
 

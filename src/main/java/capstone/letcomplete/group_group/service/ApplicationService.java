@@ -14,8 +14,8 @@ import capstone.letcomplete.group_group.repository.ApplicationRepository;
 import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,10 +137,10 @@ public class ApplicationService {
         return application.getId();
     }
 
-    public ApplicationsByMemberDto findApplicationsByMember(int sliceNum, int sliceSize, Long memberId) {
+    public ApplicationsByMemberDto findApplicationsByMember(int pageNumber, int pageSize, Long memberId) {
         // ApplicationAndResultDto 리스트 조회
-        PageRequest pageRequest = PageRequest.of(sliceNum, sliceSize, Sort.by(Sort.Direction.DESC, "createDate"));
-        Slice<ApplicationAndResultDto> findResult = applicationRepository.findApplicationsInMember(memberId, pageRequest);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
+        Page<ApplicationAndResultDto> findResult = applicationRepository.findApplicationsInMember(memberId, pageRequest);
         List<ApplicationAndResultDto> applicationsAndResultList = findResult.getContent();
 
         // 신청데이터가 수락된 상태가 아니라면 opentChatURL가 공개되지 않도록 세팅
@@ -150,8 +150,8 @@ public class ApplicationService {
             }
         }
 
-        return new ApplicationsByMemberDto(applicationsAndResultList, findResult.getNumber(),
-                findResult.isFirst(), findResult.isLast(), findResult.hasNext());
-
+        return new ApplicationsByMemberDto(applicationsAndResultList, findResult.getTotalPages(),
+                findResult.getNumber(), findResult.isLast(), findResult.isFirst()
+        );
     }
 }
