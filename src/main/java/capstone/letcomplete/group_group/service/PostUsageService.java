@@ -11,6 +11,7 @@ import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.Post;
 import capstone.letcomplete.group_group.entity.RequirementsForm;
 import capstone.letcomplete.group_group.entity.valuetype.Requirement;
+import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -118,5 +119,22 @@ public class PostUsageService {
 
         return new PostAndApplicationsDto(postAndApplicationsOverviewList, postOverViewInMember.getSliceNum(), postOverViewInMember.isFirst(), postOverViewInMember.isLast(), postOverViewInMember.isHasNext());
     }
+
+    @Transactional
+    public void deletePost(Long postId, Long memberId) throws JsonProcessingException {
+        Post post = postService.findById(postId);
+        checkPostWriter(post, memberId);
+
+        applicationService.deleteAllByPost(postId);
+        formService.deleteAllByPost(postId);
+        postService.deleteById(postId);
+    }
+
+    private void checkPostWriter(Post post, Long memberId) {
+        if(!post.getWriter().getId().equals(memberId)) {
+            throw new InvalidInputException("잘못된 입력입니다.");
+        }
+    }
+
 
 }

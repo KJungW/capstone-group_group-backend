@@ -154,4 +154,13 @@ public class ApplicationService {
                 findResult.getNumber(), findResult.isLast(), findResult.isFirst()
         );
     }
+
+    @Transactional
+    public void deleteAllByPost(Long postId) throws JsonProcessingException {
+        List<Application> applicationList = applicationRepository.findAllByPost(postId);
+        applicationRepository.deleteAll(applicationList);
+        for(Application application : applicationList) {
+            requirementsFormResultService.deleteById(application.getRequirementsFormResult().getId());
+        }
+    }
 }

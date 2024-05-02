@@ -149,4 +149,21 @@ public class RequirementsFormResultService {
         return new HashSet<>(fileTile).containsAll(inputFileTitle);
     }
 
+    @Transactional
+    public void deleteById(Long id) throws JsonProcessingException {
+        // 제거할 RequirementsFormResult 조회
+        RequirementsFormResult formResult = findById(id);
+        
+        // 조회된 RequirementsFormResult의 파일 제출물 리스트 조회
+        String requirementResultsJson = formResult.getRequirementResults();
+        AllRequirementResultsInJson allRequirementResultsInJson = convertJsonToRequirementResults(requirementResultsJson);
+        List<FileResult> fileResults = allRequirementResultsInJson.getFileResults();
+        
+        // 클라우드 스토리지에서 파일 제출물을 모두 제거
+        List<String> fileNameList = fileResults.stream().map(FileResult::getExternalName).collect(Collectors.toList());
+        s3Service.deleteAll(fileNameList);
+        
+        // RequirementsFormResult 제거
+        formResultRepository.delete(formResult);
+    }
 }

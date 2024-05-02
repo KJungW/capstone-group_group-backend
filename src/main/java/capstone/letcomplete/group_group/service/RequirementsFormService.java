@@ -39,4 +39,10 @@ public class RequirementsFormService {
         return forms.get(0);
     }
 
+
+    @Transactional
+    public void deleteAllByPost(Long postId) {
+        List<RequirementsForm> postList = requirementsFormRepository.findAllByPostId(postId);
+        requirementsFormRepository.deleteAll(postList);
+    }
 }

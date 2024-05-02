@@ -104,6 +104,19 @@ public class S3Service {
         }
     }
 
+    /*
+     * 디렉토리의 모든 파일제거
+     */
+    public void deleteAll(List<String> fileNameList) {
+        for(String fileName : fileNameList) {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(fileName)
+                    .build();
+            s3Client.deleteObject(deleteObjectRequest);
+        }
+    }
+
     private String makeOriginFileName(String directoryUrl, String fileName) {
         if(directoryUrl.endsWith("/")) {
             return directoryUrl + fileName;

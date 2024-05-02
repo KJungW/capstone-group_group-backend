@@ -12,6 +12,7 @@ public interface RequirementsFormRepository extends JpaRepository<RequirementsFo
     @Query( "select f from RequirementsForm f where f.post.id = :postId")
     List<RequirementsForm> findByPostId(@Param("postId") Long id, Pageable pageable);
 
-
+    @Query( "select f from RequirementsForm f where f.post.id = :postId")
+    List<RequirementsForm> findAllByPostId(@Param("postId") Long id);
 }
 

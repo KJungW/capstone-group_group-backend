@@ -43,4 +43,9 @@ public class PostService {
         return new PostOverViewsInMemberDto(result.getContent(), result.getNumber(), result.isFirst(), result.isLast(), result.hasNext());
     }
 
+    @Transactional
+    public void deleteById(Long id) {
+        postRepository.deleteById(id);
+    }
+
 }

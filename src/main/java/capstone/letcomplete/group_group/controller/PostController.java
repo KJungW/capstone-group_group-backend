@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,4 +38,16 @@ public class PostController {
     ) throws JsonProcessingException {
         return postUsageService.getPostDetail(id);
     }
+
+    @DeleteMapping
+    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @Operation(summary = "Delete Post", description = "모집글 제거")
+    public void deletePost(
+            @RequestParam(name="postId") Long postId
+    ) throws JsonProcessingException {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        postUsageService.deletePost(postId, memberId);
+    }
+
 }
