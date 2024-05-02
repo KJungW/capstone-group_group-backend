@@ -33,7 +33,7 @@ public class ApplicationController {
     @Operation(summary = "Add Application", description = "모집글에 대한 신청")
     public SaveApplicationOutput saveApplication(
             @RequestPart("applicationData") SaveApplicationInput input,
-            @RequestPart("filesInApplication") List<MultipartFile> inputFiles
+            @RequestPart(value = "filesInApplication", required = false) List<MultipartFile> inputFiles
     ) throws IOException {
         return new SaveApplicationOutput(applicationService.saveApplication(input, inputFiles));
     }
