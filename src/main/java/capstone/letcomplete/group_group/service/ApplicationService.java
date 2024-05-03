@@ -54,10 +54,10 @@ public class ApplicationService {
 
     public ApplicationDetailDto findApplicationDetail(Long memberId, Long applicationId) throws JsonProcessingException {
         // 필요 데이터 조회 및 검증
-        Application application = findById(applicationId);
-        if(!application.getApplicant().getId().equals(memberId))
+        Application application = findFullApplicationById(applicationId);
+        if(!application.getApplicant().getId().equals(memberId) && !application.getPost().getWriter().getId().equals(memberId))
             throw new DataNotFoundException("id에 해당하는 Application이 존재하지 않습니다.");
-        
+
         // JSON형태의 참여요건 데이터를 다시 객체로 디코딩
         RequirementsForm targetForm = application.getRequirementsFormResult().getTargetForm();
         List<Requirement> requirements = jsonUtil.convertJsonToList(targetForm.getRequirements(), Requirement.class);
@@ -98,6 +98,12 @@ public class ApplicationService {
 
     public Application findById(Long id) {
         return applicationRepository.findById(id).orElseThrow(
+                ()->new DataNotFoundException("id에 해당하는 Application이 존재하지 않습니다.")
+        );
+    }
+
+    public Application findFullApplicationById(Long id) {
+        return applicationRepository.findFullApplicationById(id).orElseThrow(
                 ()->new DataNotFoundException("id에 해당하는 Application이 존재하지 않습니다.")
         );
     }
