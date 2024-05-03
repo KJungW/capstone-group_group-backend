@@ -37,10 +37,10 @@ public class PostService {
         return new PostOverViewsInBoard(result.getContent(), result.getTotalPages(), result.getNumber(), result.isLast(), result.isFirst());
     }
 
-    public PostOverViewsInMemberDto findPostOverViewInMember(int sliceNumber, int sliceSize, Long memberId) {
-        PageRequest pageRequest = PageRequest.of(sliceNumber, sliceSize, Sort.by(Sort.Direction.DESC, "createDate"));
+    public PostOverViewsInMemberDto findPostOverViewInMember(int pageNumber, int pageSize, Long memberId) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
         Page<PostOverViewDto> result = postRepository.findPostsInMember(memberId, pageRequest);
-        return new PostOverViewsInMemberDto(result.getContent(), result.getNumber(), result.isFirst(), result.isLast(), result.hasNext());
+        return new PostOverViewsInMemberDto(result.getContent(), result.getTotalPages(), result.getNumber(), result.isLast(), result.isFirst());
     }
 
     @Transactional

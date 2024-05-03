@@ -62,12 +62,12 @@ public class MemberController {
     @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
     @Operation(summary = "Get PostOverView List By MemberID", description = "회원ID를 통해 회원이 작성한 모집글 리스트를 조회")
     public GetPostAndApplicationsByMemberOutput getPostAndApplicationByMember(
-            @RequestParam("sliceNum") int sliceNum,
-            @RequestParam("sliceSize") int sliceSize
+            @RequestParam("pageNumber") int pageNumber,
+            @RequestParam("pageSize") int pageSize
     ) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long memberId = Long.valueOf(userDetails.getUsername());
-        PostAndApplicationsDto postAndApplicationsByMember = postUsageService.findPostAndApplicationsByMember(sliceNum, sliceSize, memberId);
+        PostAndApplicationsDto postAndApplicationsByMember = postUsageService.findPostAndApplicationsByMember(pageNumber, pageSize, memberId);
         return new GetPostAndApplicationsByMemberOutput(postAndApplicationsByMember);
     }
     

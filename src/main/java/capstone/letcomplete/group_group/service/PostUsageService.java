@@ -89,9 +89,9 @@ public class PostUsageService {
                 .toList();
     }
 
-    public PostAndApplicationsDto findPostAndApplicationsByMember(int sliceNum, int sliceSize, Long memberId) {
+    public PostAndApplicationsDto findPostAndApplicationsByMember(int pageNumber, int pageSize, Long memberId) {
         // 현재 멤버가 작성한 모든 모집글 리스트 조회
-        PostOverViewsInMemberDto postOverViewInMember = postService.findPostOverViewInMember(sliceNum, sliceSize, memberId);
+        PostOverViewsInMemberDto postOverViewInMember = postService.findPostOverViewInMember(pageNumber, pageSize, memberId);
 
         // 모집글마다의 신청 리스트 조회
         List<Long> postIdList = postOverViewInMember.getContents().stream()
@@ -117,7 +117,7 @@ public class PostUsageService {
             postAndApplicationsOverviewList.add(postAndApplicationsOverview);
         }
 
-        return new PostAndApplicationsDto(postAndApplicationsOverviewList, postOverViewInMember.getSliceNum(), postOverViewInMember.isFirst(), postOverViewInMember.isLast(), postOverViewInMember.isHasNext());
+        return new PostAndApplicationsDto(postAndApplicationsOverviewList, postOverViewInMember.getTotalPages(), postOverViewInMember.getCurrentPageNumber(), postOverViewInMember.isLastPage(), postOverViewInMember.isFirstPage());
     }
 
     @Transactional
