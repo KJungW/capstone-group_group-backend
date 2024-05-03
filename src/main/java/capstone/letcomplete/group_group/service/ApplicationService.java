@@ -41,6 +41,9 @@ public class ApplicationService {
     public Long saveApplication(SaveApplicationInput input, List<MultipartFile> inputFiles) throws IOException {
         // Application의 구성요소 세팅
         Post post = postService.findById(input.getPostId());
+        if(post.getWriter().getId().equals(input.getApplicantId())){
+            throw new InvalidInputException("자신이 작성한 모집글에 신청을 하는 것은 불가능합니다.");
+        }
         Member member = memberService.findById(input.getApplicantId());
         Long formResultId = requirementsFormResultService.save(input, inputFiles);
         RequirementsFormResult formResult = requirementsFormResultService.findById(formResultId);
