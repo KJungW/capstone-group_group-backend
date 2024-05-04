@@ -29,7 +29,7 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "Add Application", description = "모집글에 대한 신청")
     public SaveApplicationOutput saveApplication(
             @RequestPart("applicationData") SaveApplicationInput input,
@@ -39,7 +39,7 @@ public class ApplicationController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "GET APPLICATION DETAIL", description = "신청 세부정보 조회")
     public GetApplicationDetailOutput getApplicationDetail(
             @RequestParam("applicationId") Long applicationId
@@ -51,7 +51,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/state")
-    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "Update Application State", description = "신청 수락/거부")
     public UpdateApplicationStateOutput updateApplicationState(
             @RequestParam("applicationId") Long applicationId,

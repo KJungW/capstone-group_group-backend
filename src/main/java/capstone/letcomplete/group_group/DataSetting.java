@@ -105,16 +105,6 @@ public class DataSetting {
         boardService.createBoard(campusId, "스터디$사회과학");
         boardService.createBoard(campusId, "스터디$디자인");
 
-        // 모집글추가
-        for(int i=0;i<30;i++) {
-            Long postId = createPost(
-                    boardId, member0, "모집글"+i, "디테일", PassionSize.MIDDLE, "추가", "URL",
-                    new CreateRequirementInput("요건1", RequirementResultType.TEXT),
-                    new CreateRequirementInput("요건2", RequirementResultType.FILE),
-                    new CreateRequirementInput("요건3", RequirementResultType.TEXT)
-            );
-        }
-
     }
 
     private Long createInitManager(String email, String pw, String nickName, ManagerRoleType role) {
@@ -132,22 +122,6 @@ public class DataSetting {
 
     private Long createBoard(Long campusId, String boardTitle) {
         return boardService.createBoard(campusId, boardTitle);
-    }
-
-    private Long createPost(
-            Long boardID, Long writerId, String title, String activityDetail,
-            PassionSize passionSize, String additionalWriting, String openChatUrl,
-            CreateRequirementInput requirement1, CreateRequirementInput requirement2, CreateRequirementInput requirement3
-    ) throws JsonProcessingException {
-        List<CreateRequirementInput> requirementInputList = new ArrayList<>();
-        requirementInputList.add(requirement1);
-        requirementInputList.add(requirement2);
-        requirementInputList.add(requirement3);
-
-        return postUsageService.savePost(new CreatePostInput(
-                boardID, writerId, title, activityDetail, passionSize, additionalWriting,
-                openChatUrl, requirementInputList
-        ));
     }
 
 }

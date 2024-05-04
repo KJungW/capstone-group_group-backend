@@ -23,7 +23,7 @@ public class PostController {
     private final PostUsageService postUsageService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "Creat Post", description = "모집글을 추가하는 API")
     public SavePostOutput savePost(@Valid @RequestBody CreatePostInput createPostInput) throws JsonProcessingException {
         Long savedPostId = postUsageService.savePost(createPostInput);
@@ -40,7 +40,7 @@ public class PostController {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "Delete Post", description = "모집글 제거")
     public void deletePost(
             @RequestParam(name="postId") Long postId

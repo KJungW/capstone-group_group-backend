@@ -59,7 +59,7 @@ public class MemberController {
     }
 
     @GetMapping("/posts")
-    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "Get PostOverView List By MemberID", description = "회원ID를 통해 회원이 작성한 모집글 리스트를 조회")
     public GetPostAndApplicationsByMemberOutput getPostAndApplicationByMember(
             @RequestParam("pageNumber") int pageNumber,
@@ -72,7 +72,7 @@ public class MemberController {
     }
     
     @GetMapping("/applications")
-    @PreAuthorize("hasAnyRole('ROLE_ME_COMMON', 'ROLE_MG_COMMON')")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "Get Application List By Member", description = "회원ID를 통해 회원이 작성한 신청리스트 조회")
     public GetApplicationsByMemberOutput getApplicationsByMember(
             @RequestParam("pageNumber") int pageNumber,
