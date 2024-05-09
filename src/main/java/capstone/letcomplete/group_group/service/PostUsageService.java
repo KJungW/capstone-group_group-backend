@@ -4,6 +4,7 @@ import capstone.letcomplete.group_group.dto.entitymake.MakePostDto;
 import capstone.letcomplete.group_group.dto.input.CreatePostInput;
 import capstone.letcomplete.group_group.dto.input.CreateRequirementInput;
 import capstone.letcomplete.group_group.dto.logic.*;
+import capstone.letcomplete.group_group.dto.output.GetPostDetailByMemberOutput;
 import capstone.letcomplete.group_group.dto.output.GetPostDetailOutput;
 import capstone.letcomplete.group_group.dto.output.GetRequirementOutput;
 import capstone.letcomplete.group_group.entity.Board;
@@ -11,6 +12,7 @@ import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.Post;
 import capstone.letcomplete.group_group.entity.RequirementsForm;
 import capstone.letcomplete.group_group.entity.valuetype.Requirement;
+import capstone.letcomplete.group_group.exception.DataNotFoundException;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -52,6 +54,20 @@ public class PostUsageService {
                 post.getTitle(), post.getActivityDetail(), post.getPassionSize(), post.getAdditionalWriting(),
                 makeRequirementOutputsByForm(form)
         );
+    }
+
+    public GetPostDetailByMemberOutput getPostDetailByMember(Long postId, Long memberId) throws JsonProcessingException {
+        Post post = postService.findById(postId);
+        RequirementsForm form = formService.findNewestWithPostId(postId);
+        GetPostDetailByMemberOutput result = new GetPostDetailByMemberOutput(
+                post.getBoard().getId(), post.getBoard().getTitle(), post.getWriter().getId(), post.getWriter().getNickName(),
+                post.getTitle(), post.getActivityDetail(), post.getPassionSize(), post.getAdditionalWriting(),
+                post.getOpenChatUrl(), makeRequirementOutputsByForm(form)
+        );
+        if(!post.getWriter().getId().equals(memberId)) {
+            result.removeOpenChatUrl();
+        }
+        return result;
     }
 
     private Post makePostByInput(CreatePostInput input) {

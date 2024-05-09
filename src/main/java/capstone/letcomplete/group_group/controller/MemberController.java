@@ -4,14 +4,15 @@ import capstone.letcomplete.group_group.dto.input.FindMemberByTokenInput;
 import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
 import capstone.letcomplete.group_group.dto.logic.ApplicationsByMemberDto;
 import capstone.letcomplete.group_group.dto.logic.PostAndApplicationsDto;
-import capstone.letcomplete.group_group.dto.output.FindMemberByTokenOutput;
-import capstone.letcomplete.group_group.dto.output.GetApplicationsByMemberOutput;
-import capstone.letcomplete.group_group.dto.output.GetPostAndApplicationsByMemberOutput;
+import capstone.letcomplete.group_group.dto.output.*;
 import capstone.letcomplete.group_group.entity.Member;
+import capstone.letcomplete.group_group.exception.DataNotFoundException;
 import capstone.letcomplete.group_group.service.ApplicationService;
 import capstone.letcomplete.group_group.service.MemberService;
 import capstone.letcomplete.group_group.service.PostUsageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -82,6 +83,18 @@ public class MemberController {
         Long memberId = Long.valueOf(userDetails.getUsername());
         ApplicationsByMemberDto result = applicationService.findApplicationsByMember(pageNumber, pageSize, memberId);
         return new GetApplicationsByMemberOutput(result);
+    }
+
+    @GetMapping("/post")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
+    @Operation(summary = "Get Post Detail written by member", description = "자신이 작성한 모집글에 대한 세부정보를 조회하는 API")
+    public GetPostDetailByMemberOutput getPostDetailByMember(
+            @Schema(description = "조회할 모집글 ID")
+            @RequestParam(name = "postId") Long postId
+    ) throws JsonProcessingException {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        return postUsageService.getPostDetailByMember(postId, memberId);
     }
 
 }
