@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 public class ApplicationAndResultOutput {
@@ -19,6 +21,8 @@ public class ApplicationAndResultOutput {
     private ApplicationState applicationState;
     @Schema(description = "오픈채팅방 주소")
     private String openChatUrl;
+    @Schema(description = "신청요청을 한 시간")
+    private LocalDateTime createdTime;
 
     public ApplicationAndResultOutput(ApplicationAndResultDto dto) {
         this.applicationId = dto.getApplicationId();
@@ -26,5 +30,6 @@ public class ApplicationAndResultOutput {
         this.postTitle = dto.getPostTitle();
         this.applicationState = dto.getApplicationState();
         this.openChatUrl = dto.getOpenChatUrl();
+        this.createdTime =dto.getCreatedTime();
     }
 }

@@ -22,7 +22,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query("select new capstone.letcomplete.group_group.dto.logic.ApplicationOverviewDto(a.post.id, a.id, a.applicant.nickName, a.isPassed) from Application a where a.post.id in :postIdList")
     List<ApplicationOverviewDto> findApplicationsInPosts(@Param("postIdList") List<Long> postIdList);
 
-    @Query("select new capstone.letcomplete.group_group.dto.logic.ApplicationAndResultDto(a.id, a.isPassed, a.post.id, a.post.title, a.post.openChatUrl) from Application a where a.applicant.id = :memberId")
+    @Query("select new capstone.letcomplete.group_group.dto.logic.ApplicationAndResultDto(a.id, a.isPassed, a.post.id, a.post.title, a.post.openChatUrl, a.createDate) from Application a where a.applicant.id = :memberId")
     Page<ApplicationAndResultDto> findApplicationsInMember(@Param("memberId") Long memberId, Pageable pageable);
 
     @Query("select a from Application a where a.post.id = :postId")
