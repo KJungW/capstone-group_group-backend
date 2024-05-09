@@ -10,5 +10,6 @@ import java.time.LocalDateTime;
 public class PostOverViewDto {
     private Long id;
     private String title;
+    private String writerNickName;
     private LocalDateTime createDate;
 }
