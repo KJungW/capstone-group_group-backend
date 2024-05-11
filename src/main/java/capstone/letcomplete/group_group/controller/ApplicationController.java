@@ -6,6 +6,7 @@ import capstone.letcomplete.group_group.dto.output.GetApplicationDetailOutput;
 import capstone.letcomplete.group_group.dto.output.SaveApplicationOutput;
 import capstone.letcomplete.group_group.dto.output.UpdateApplicationStateOutput;
 import capstone.letcomplete.group_group.entity.enumtype.ApplicationState;
+import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.service.ApplicationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,5 +62,22 @@ public class ApplicationController {
         Long memberId = Long.valueOf(userDetails.getUsername());
         Long updatedApplicationId = applicationService.updateApplicationState(memberId, applicationId, applicationState);
         return new UpdateApplicationStateOutput(updatedApplicationId);
+    }
+
+    @GetMapping("/verification")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
+    @Operation(summary = " Verify Application", description = "모집글에 신청이 가능한지 여부를 조회")
+    public boolean verifyApplication(
+            @RequestParam("postId") Long postId
+    ) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        try {
+            applicationService.checkApplicationForMyPost(memberId, postId);
+            applicationService.checkDuplicateApplication(memberId, postId);
+        } catch (InvalidInputException e) {
+            return false;
+        }
+        return true;
     }
 }
