@@ -39,11 +39,12 @@ public class ApplicationService {
 
     @Transactional
     public Long saveApplication(SaveApplicationInput input, List<MultipartFile> inputFiles) throws IOException {
-        // Application의 구성요소 세팅
+        // 검증
+        checkApplicationForMyPost(input.getApplicantId(), input.getPostId());
+        checkDuplicateApplication(input.getApplicantId(), input.getPostId());
+
+        // Application의 구성요소 세팅과 검증
         Post post = postService.findById(input.getPostId());
-        if(post.getWriter().getId().equals(input.getApplicantId())){
-            throw new InvalidInputException("자신이 작성한 모집글에 신청을 하는 것은 불가능합니다.");
-        }
         Member member = memberService.findById(input.getApplicantId());
         Long formResultId = requirementsFormResultService.save(input, inputFiles);
         RequirementsFormResult formResult = requirementsFormResultService.findById(formResultId);
@@ -170,6 +171,27 @@ public class ApplicationService {
         applicationRepository.deleteAll(applicationList);
         for(Application application : applicationList) {
             requirementsFormResultService.deleteById(application.getRequirementsFormResult().getId());
+        }
+    }
+
+    public List<Application> findAllApplicationsByMember(Long memberId) {
+        return applicationRepository.findAllByMember(memberId);
+    }
+
+    public void checkApplicationForMyPost (Long applicantId, Long postId) {
+        Post post = postService.findById(postId);
+        if(post.getWriter().getId().equals(applicantId)){
+            throw new InvalidInputException("자신이 작성한 모집글에 신청을 하는 것은 불가능합니다.");
+        }
+    }
+
+    public void checkDuplicateApplication (Long memberId, Long postId) {
+        List<Application> allApplicationsByMember = findAllApplicationsByMember(memberId);
+        List<Application> checkedApplication = allApplicationsByMember.stream()
+                .filter(app -> app.getPost().getId().equals(postId))
+                .collect(Collectors.toList());
+        if(!checkedApplication.isEmpty()) {
+            throw new InvalidInputException("같은 모집글에 중복신청을 하는 것은 불가능합니다.");
         }
     }
 }

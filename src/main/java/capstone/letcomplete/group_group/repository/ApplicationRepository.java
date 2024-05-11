@@ -27,4 +27,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     @Query("select a from Application a where a.post.id = :postId")
     List<Application> findAllByPost(@Param("postId") Long postId);
+
+    @Query("select a from Application a where a.applicant.id = :memberId")
+    List<Application> findAllByMember(@Param("memberId") Long memberId);
 }
