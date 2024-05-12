@@ -3,6 +3,7 @@ package capstone.letcomplete.group_group.config;
 import capstone.letcomplete.group_group.exception.handler.JwtAccessDeniedHandler;
 import capstone.letcomplete.group_group.exception.handler.JwtAuthenticationEntryPoint;
 import capstone.letcomplete.group_group.filter.JwtAuthFilter;
+import capstone.letcomplete.group_group.repository.LoginCacheRedisRepository;
 import capstone.letcomplete.group_group.service.userdetail.ManagerUserDetailService;
 import capstone.letcomplete.group_group.service.userdetail.MemberUserDetailService;
 import capstone.letcomplete.group_group.util.JwtUtil;
@@ -32,6 +33,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAccessDeniedHandler accessDeniedHandler;
     private final CorsConfigurationSource corsConfigurationSource;
+    private final LoginCacheRedisRepository loginCacheRedisRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -51,7 +53,7 @@ public class SecurityConfig {
 
         // jwt토큰 검증 필터를 추가
         http.addFilterBefore(
-                new JwtAuthFilter(managerUserDetailService, memberUserDetailService, jwtUtil),
+                new JwtAuthFilter(managerUserDetailService, memberUserDetailService, jwtUtil, loginCacheRedisRepository),
                 UsernamePasswordAuthenticationFilter.class
         );
 

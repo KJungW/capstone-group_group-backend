@@ -2,6 +2,7 @@ package capstone.letcomplete.group_group.filter;
 
 import capstone.letcomplete.group_group.entity.enumtype.AccountType;
 import capstone.letcomplete.group_group.exception.WrongAccountTypeException;
+import capstone.letcomplete.group_group.repository.LoginCacheRedisRepository;
 import capstone.letcomplete.group_group.service.userdetail.ManagerUserDetailService;
 import capstone.letcomplete.group_group.service.userdetail.MemberUserDetailService;
 import capstone.letcomplete.group_group.util.JwtUtil;
@@ -26,6 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final ManagerUserDetailService managerUserDetailService;
     private final MemberUserDetailService memberUserDetailService;
     private final JwtUtil jwtUtil;
+    private final LoginCacheRedisRepository loginCacheRedisRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response, FilterChain filterChain)
@@ -49,6 +51,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Long id = claims.get("id", Long.class);
             AccountType accountType = AccountType.valueOf(claims.get("role", String.class));
 
+            // 중복 로그인 여부 체크
+            if(!loginCacheRedisRepository.hasKey(id)) return;
+            if(!loginCacheRedisRepository.getLoginCache(id).equals(token)) return;
+
+            // 인가과정
             try {
                 UserDetails userDetails = makeUserDetail(id, accountType);
                 UsernamePasswordAuthenticationToken usernamePasswordToken =

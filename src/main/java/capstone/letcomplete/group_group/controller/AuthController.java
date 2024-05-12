@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +29,14 @@ public class AuthController {
     public LoginMemberOutput login(@Valid @RequestBody LoginInput loginInput) {
 
         return authService.login(loginInput);
+    }
+    @PostMapping("logout")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
+    @Operation(summary = "Member Logout", description = "일반 회원 로그아웃")
+    public String logout() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        authService.logout(memberId);
+        return "ok";
     }
 }
