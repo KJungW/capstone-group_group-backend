@@ -7,10 +7,16 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE post SET deleted_At = NOW() WHERE id = ?")
+@SQLRestriction("deleted_at is NULL")
 public class Post extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
@@ -38,6 +44,8 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private String openChatUrl;
+
+    private LocalDateTime deletedAt;
 
     public static Post makePost(MakePostDto dto) {
         Post post = new Post();

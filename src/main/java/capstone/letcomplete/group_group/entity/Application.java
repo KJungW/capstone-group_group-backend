@@ -6,10 +6,16 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE application SET deleted_At = NOW() WHERE id = ?")
+@SQLRestriction("deleted_at is NULL")
 public class Application extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
@@ -27,8 +33,10 @@ public class Application extends BaseEntity {
     private ApplicationState isPassed;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="REQUIREMENT_FORM_RESULT_ID", nullable = false)
+    @JoinColumn(name="REQUIREMENT_FORM_RESULT_ID")
     private RequirementsFormResult requirementsFormResult;
+
+    private LocalDateTime deletedAt;
 
     public static Application makeApplication(
             Post post, Member applicant, ApplicationState isPassed,
@@ -45,4 +53,9 @@ public class Application extends BaseEntity {
     public void changeApplicationState(ApplicationState state) {
         this.isPassed = state;
     }
+
+    public void disconnectRequirementsFormResult() {
+        this.requirementsFormResult = null;
+    }
+
 }

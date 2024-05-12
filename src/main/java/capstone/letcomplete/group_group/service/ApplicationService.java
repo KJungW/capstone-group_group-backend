@@ -35,6 +35,7 @@ public class ApplicationService {
     private final PostService postService;
     private final MemberService memberService;
     private final RequirementsFormResultService requirementsFormResultService;
+    private final DisabledApplicationService disabledApplicationService;
     private final JsonUtil jsonUtil;
 
     @Transactional
@@ -167,10 +168,30 @@ public class ApplicationService {
 
     @Transactional
     public void deleteAllByPost(Long postId) throws JsonProcessingException {
+        // 필요한 데이터 조회
         List<Application> applicationList = applicationRepository.findAllByPost(postId);
-        applicationRepository.deleteAll(applicationList);
+        List<Long> formResultIdList = applicationList.stream().map(app -> app.getRequirementsFormResult().getId()).toList();;
+
+        // disabledApplication 생성
         for(Application application : applicationList) {
-            requirementsFormResultService.deleteById(application.getRequirementsFormResult().getId());
+            DisabledApplication disabledApplication = DisabledApplication.createDisabledApplication(
+                    application.getId(), application.getApplicant().getId(),
+                    application.getPost().getId(), application.getPost().getTitle(),
+                    application.getIsPassed(), application.getCreateDate()
+            );
+            disabledApplicationService.save(disabledApplication);
+        }
+
+        // application 제거
+        for(Application application : applicationList) {
+            application.disconnectRequirementsFormResult();
+        }
+        applicationRepository.flush();
+        applicationRepository.deleteAll(applicationList);
+
+        // application과 연결된 RequirementsFormResult 제거
+        for(Long id : formResultIdList) {
+            requirementsFormResultService.deleteById(id);
         }
     }
 

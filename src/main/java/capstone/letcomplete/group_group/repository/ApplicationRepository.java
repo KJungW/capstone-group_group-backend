@@ -25,9 +25,11 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query("select new capstone.letcomplete.group_group.dto.logic.ApplicationAndResultDto(a.id, a.isPassed, a.post.id, a.post.title, a.post.openChatUrl, a.createDate) from Application a where a.applicant.id = :memberId")
     Page<ApplicationAndResultDto> findApplicationsInMember(@Param("memberId") Long memberId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"post", "applicant", "requirementsFormResult"})
     @Query("select a from Application a where a.post.id = :postId")
     List<Application> findAllByPost(@Param("postId") Long postId);
 
     @Query("select a from Application a where a.applicant.id = :memberId")
     List<Application> findAllByMember(@Param("memberId") Long memberId);
+
 }
