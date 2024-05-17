@@ -1,6 +1,7 @@
 package capstone.letcomplete.group_group.controller;
 
 import capstone.letcomplete.group_group.dto.input.CreatePostInput;
+import capstone.letcomplete.group_group.dto.input.UpdatePostInput;
 import capstone.letcomplete.group_group.dto.output.GetPostDetailOutput;
 import capstone.letcomplete.group_group.dto.output.SavePostOutput;
 import capstone.letcomplete.group_group.service.PostUsageService;
@@ -48,6 +49,17 @@ public class PostController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long memberId = Long.valueOf(userDetails.getUsername());
         postUsageService.deletePost(postId, memberId);
+    }
+
+    @PutMapping
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
+    @Operation(summary = "Update Post", description = "모집글 수정")
+    public void updatePost (
+            @Valid @RequestBody UpdatePostInput updatePostInput
+    ) throws JsonProcessingException {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        postUsageService.updatePost(updatePostInput, memberId);
     }
 
 }

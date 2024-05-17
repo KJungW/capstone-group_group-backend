@@ -3,6 +3,7 @@ package capstone.letcomplete.group_group.service;
 import capstone.letcomplete.group_group.dto.entitymake.MakePostDto;
 import capstone.letcomplete.group_group.dto.input.CreatePostInput;
 import capstone.letcomplete.group_group.dto.input.CreateRequirementInput;
+import capstone.letcomplete.group_group.dto.input.UpdatePostInput;
 import capstone.letcomplete.group_group.dto.logic.*;
 import capstone.letcomplete.group_group.dto.output.GetPostDetailByMemberOutput;
 import capstone.letcomplete.group_group.dto.output.GetPostDetailOutput;
@@ -12,7 +13,6 @@ import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.Post;
 import capstone.letcomplete.group_group.entity.RequirementsForm;
 import capstone.letcomplete.group_group.entity.valuetype.Requirement;
-import capstone.letcomplete.group_group.exception.DataNotFoundException;
 import capstone.letcomplete.group_group.exception.InvalidInputException;
 import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -153,4 +153,14 @@ public class PostUsageService {
     }
 
 
+    @Transactional
+    public void updatePost(UpdatePostInput updatePostInput, Long memberId) throws JsonProcessingException {
+        Post post = postService.findById(updatePostInput.getPostId());
+        checkPostWriter(post, memberId);
+
+        RequirementsForm newForm = makeFormByInput(post, updatePostInput.getRequirementList());
+        post.UpdatePost(new UpdatePostDto(updatePostInput.getTitle(), updatePostInput.getActivityDetail(), updatePostInput.getPassionSize(),
+                updatePostInput.getAdditionalWriting(), updatePostInput.getOpenChatUrl()));
+        formService.SaveRequirementsForm(newForm);
+    }
 }
