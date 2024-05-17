@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -17,11 +16,6 @@ public class CreatePostInput {
     @Min(value = 0)
     @Schema(description = "모집글을 작성할 게시판ID")
     private Long boardId;
-
-    @NotNull
-    @Min(value = 0)
-    @Schema(description = "작성자 ID")
-    private Long writerId;
 
     @NotBlank
     @Schema(description = "모집글 제목")
@@ -45,11 +39,10 @@ public class CreatePostInput {
     @Schema(description = "참여요건 리스트")
     private List<CreateRequirementInput> requirementList;
 
-    public CreatePostInput(Long boardId, Long writerId, String title, String activityDetail,
+    public CreatePostInput(Long boardId, String title, String activityDetail,
                            PassionSize passionSize, String additionalWriting, String openChatUrl,
                            List<CreateRequirementInput> requirementList) {
         this.boardId = boardId;
-        this.writerId = writerId;
         this.title = title;
         this.activityDetail = activityDetail;
         this.passionSize = passionSize;

@@ -37,8 +37,8 @@ public class PostUsageService {
     private final JsonUtil jsonUtil;
 
     @Transactional
-    public Long savePost(CreatePostInput input) throws JsonProcessingException {
-        Post newPost = makePostByInput(input);
+    public Long savePost(CreatePostInput input, Long memberId) throws JsonProcessingException {
+        Post newPost = makePostByInput(input, memberId);
         RequirementsForm newForm = makeFormByInput(newPost, input.getRequirementList());
 
         postService.savePost(newPost);
@@ -70,9 +70,9 @@ public class PostUsageService {
         return result;
     }
 
-    private Post makePostByInput(CreatePostInput input) {
+    private Post makePostByInput(CreatePostInput input, Long memberId) {
         Board inputBoard = boardService.findById(input.getBoardId());
-        Member inputWriter = memberService.findById(input.getWriterId());
+        Member inputWriter = memberService.findById(memberId);
         return Post.makePost(
                 new MakePostDto(
                         inputBoard, inputWriter, input.getTitle(),

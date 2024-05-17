@@ -27,7 +27,9 @@ public class PostController {
     @PreAuthorize("hasRole('ROLE_ME_COMMON')")
     @Operation(summary = "Creat Post", description = "모집글을 추가하는 API")
     public SavePostOutput savePost(@Valid @RequestBody CreatePostInput createPostInput) throws JsonProcessingException {
-        Long savedPostId = postUsageService.savePost(createPostInput);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        Long savedPostId = postUsageService.savePost(createPostInput, memberId);
         return new SavePostOutput(savedPostId);
     }
 
