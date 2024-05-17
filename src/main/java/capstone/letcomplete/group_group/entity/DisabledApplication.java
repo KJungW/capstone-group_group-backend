@@ -19,6 +19,7 @@ public class DisabledApplication {
     private Long applicantId;
     private Long postId;
     private String postTitle;
+    @Enumerated(value=EnumType.STRING)
     private ApplicationState isPassed;
     private LocalDateTime createTime;
 

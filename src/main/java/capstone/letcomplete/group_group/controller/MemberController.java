@@ -3,11 +3,12 @@ package capstone.letcomplete.group_group.controller;
 import capstone.letcomplete.group_group.dto.input.FindMemberByTokenInput;
 import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
 import capstone.letcomplete.group_group.dto.logic.ApplicationsByMemberDto;
+import capstone.letcomplete.group_group.dto.logic.DisabledAppPreviewsInPageDto;
 import capstone.letcomplete.group_group.dto.logic.PostAndApplicationsDto;
 import capstone.letcomplete.group_group.dto.output.*;
 import capstone.letcomplete.group_group.entity.Member;
-import capstone.letcomplete.group_group.exception.DataNotFoundException;
 import capstone.letcomplete.group_group.service.ApplicationService;
+import capstone.letcomplete.group_group.service.DisabledApplicationService;
 import capstone.letcomplete.group_group.service.MemberService;
 import capstone.letcomplete.group_group.service.PostUsageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,6 +31,7 @@ public class MemberController {
     private final MemberService memberService;
     private final PostUsageService postUsageService;
     private final ApplicationService applicationService;
+    private final DisabledApplicationService disabledApplicationService;
 
     @PostMapping("/signup")
     @Operation(summary = "Signup Start", description = "일반 회원(Member)에 대한 회원가입을 인증메일을 요청하는 API")
@@ -84,6 +86,20 @@ public class MemberController {
         ApplicationsByMemberDto result = applicationService.findApplicationsByMember(pageNumber, pageSize, memberId);
         return new GetApplicationsByMemberOutput(result);
     }
+
+    @GetMapping("/disabled-application")
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
+    @Operation(summary = "Get Disabled Application List By Member", description = "회원ID를 통해 회원이 작성한 신청들 중 비활성화된 신청리스트 조회")
+    public GetDisabledApplicationsByMemberOutput getDisabledApplicationByMember(
+            @RequestParam("pageNumber") int pageNumber,
+            @RequestParam("pageSize") int pageSize
+    ) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        DisabledAppPreviewsInPageDto searchResult = disabledApplicationService.findPreviewsInPageByMember(memberId, pageNumber, pageSize);
+        return new GetDisabledApplicationsByMemberOutput(searchResult);
+    }
+
 
     @GetMapping("/post")
     @PreAuthorize("hasRole('ROLE_ME_COMMON')")
