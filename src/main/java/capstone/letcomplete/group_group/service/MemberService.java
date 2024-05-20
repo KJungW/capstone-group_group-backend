@@ -43,6 +43,7 @@ public class MemberService {
     public void signupStart(SignupMemberInput input) throws MessagingException {
         // 입력된 회원정보에 대한 검증
         validateEmail(input.getEmail());
+        checkNickNameAvailability(input.getNickName());
         campusService.checkCampusExistence(input.getCampusId());
 
         try {
@@ -147,5 +148,14 @@ public class MemberService {
             throw new InvalidInputException("유효하지 않은 토큰입니다.");
         Long id = jwtUtil.getIdFromToken(jwtToken);
         return findById(id);
+    }
+
+    public void checkNickNameAvailability(String nickName) {
+        checkNickNameDuplication(nickName);
+    }
+
+    private void checkNickNameDuplication(String nickName) {
+        if(memberRepository.findByNickName(nickName).isPresent())
+            throw new InvalidInputException("이미 존재하는 닉네임입니다.");
     }
 }

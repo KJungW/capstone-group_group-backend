@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,6 +48,15 @@ public class MemberController {
     )  {
         memberService.signupComplete(email, certificationNumber);
         return "회원가입이 완료되었습니다. 홈페이지로 돌아가서 로그인을 해주세요";
+    }
+
+    @GetMapping("signup/nickname")
+    @Operation(summary = "Check Nickname Availability", description = "닉네임 사용 가능여부 확인")
+    public String checkNicknameAvailability(
+            @Length(min=1, max = 20) @RequestParam(name="nickName") String nickName
+    ) {
+        memberService.checkNickNameAvailability(nickName);
+        return "ok";
     }
 
     @PostMapping("/token")
