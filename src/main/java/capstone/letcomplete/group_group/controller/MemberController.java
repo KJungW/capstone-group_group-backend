@@ -7,10 +7,7 @@ import capstone.letcomplete.group_group.dto.logic.DisabledAppPreviewsInPageDto;
 import capstone.letcomplete.group_group.dto.logic.PostAndApplicationsDto;
 import capstone.letcomplete.group_group.dto.output.*;
 import capstone.letcomplete.group_group.entity.Member;
-import capstone.letcomplete.group_group.service.ApplicationService;
-import capstone.letcomplete.group_group.service.DisabledApplicationService;
-import capstone.letcomplete.group_group.service.MemberService;
-import capstone.letcomplete.group_group.service.PostUsageService;
+import capstone.letcomplete.group_group.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,6 +30,7 @@ public class MemberController {
     private final PostUsageService postUsageService;
     private final ApplicationService applicationService;
     private final DisabledApplicationService disabledApplicationService;
+    private final MemberAndPostService memberAndPostService;
 
     @PostMapping("/signup")
     @Operation(summary = "Signup Start", description = "일반 회원(Member)에 대한 회원가입을 인증메일을 요청하는 API")
@@ -121,6 +119,16 @@ public class MemberController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long memberId = Long.valueOf(userDetails.getUsername());
         return postUsageService.getPostDetailByMember(postId, memberId);
+    }
+
+    @DeleteMapping()
+    @PreAuthorize("hasRole('ROLE_ME_COMMON')")
+    @Operation(summary = "Get Post Detail written by member", description = "자신이 작성한 모집글에 대한 세부정보를 조회하는 API")
+    public String deleteMember() throws JsonProcessingException {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberId = Long.valueOf(userDetails.getUsername());
+        memberAndPostService.deleteMember(memberId);
+        return "ok";
     }
 
 }

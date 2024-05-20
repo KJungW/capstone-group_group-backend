@@ -13,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -41,6 +43,10 @@ public class PostService {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
         Page<PostOverViewDto> result = postRepository.findPostsInMember(memberId, pageRequest);
         return new PostOverViewsInMemberDto(result.getContent(), result.getTotalPages(), result.getNumber(), result.isLast(), result.isFirst());
+    }
+
+    public List<Post> findAllByMember(Long memberId) {
+        return postRepository.findAllInMember(memberId);
     }
 
     @Transactional
