@@ -24,9 +24,14 @@ public class MemberAndPostService {
         Member member = memberService.findById(memberId);
         List<Post> postsInMember = postService.findAllByMember(memberId);
 
+        // 멤버와 관련된 모집글과 신청 지우기
         for(Post post : postsInMember) {
             postUsageService.deletePost(post.getId(), memberId);
         }
+        
+        // 멤버제거하기
+        member.disableEmail();
+        memberRepository.flush();
         memberRepository.delete(member);
     }
 }

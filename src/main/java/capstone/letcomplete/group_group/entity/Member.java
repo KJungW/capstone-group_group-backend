@@ -48,4 +48,8 @@ public class Member extends BaseEntity {
         member.campus = campus;
         return member;
     }
+
+    public void disableEmail() {
+        this.email = this.email + "@@@@" +this.id;
+    }
 }
