@@ -1,7 +1,9 @@
 package capstone.letcomplete.group_group.controller;
 
+import capstone.letcomplete.group_group.dto.logic.PostOverViewDto;
 import capstone.letcomplete.group_group.dto.logic.PostOverViewsInBoard;
 import capstone.letcomplete.group_group.dto.output.GetPostsInBoardOutput;
+import capstone.letcomplete.group_group.dto.output.SearchPostInBoardByTitleOutput;
 import capstone.letcomplete.group_group.service.BoardService;
 import capstone.letcomplete.group_group.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,8 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/board")
@@ -31,4 +33,18 @@ public class BoardController {
         PostOverViewsInBoard postOverViewsInBoard = postService.findPostOverViewInBoard(pageNumber, pageSize, boardId);
         return new GetPostsInBoardOutput(boardTitle, postOverViewsInBoard);
     }
+
+    @GetMapping("/search")
+    @Operation(summary = "Search Posts In Board By Tile", description = "제목으로 게시판 내의 모집글 검색")
+    public SearchPostInBoardByTitleOutput SearchPostInBoardByTitle(
+            @RequestParam("boardId") Long boardId,
+            @RequestParam("pageNum") int pageNum,
+            @RequestParam("postSize") int pageSize,
+            @RequestParam("searchString") String searchString
+    ) {
+        String boardTitle = boardService.findById(boardId).getTitle();
+        Page<PostOverViewDto> searchResult = postService.searchPostsInBoardByTitle(pageNum, pageSize, boardId, searchString);
+        return new SearchPostInBoardByTitleOutput(boardTitle, searchResult);
+    }
+
 }

@@ -2,6 +2,7 @@ package capstone.letcomplete.group_group.repository;
 
 import capstone.letcomplete.group_group.dto.logic.PostOverViewDto;
 import capstone.letcomplete.group_group.entity.Post;
+import capstone.letcomplete.group_group.repository.custom.PostRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryCustom {
     @Query("select p from Post p where p.writer.id = :writerId")
     List<Post> findAllInMember(@Param("writerId") Long memberId);
 

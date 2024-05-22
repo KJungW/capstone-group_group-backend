@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,4 +55,15 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
+    public Page<PostOverViewDto> searchPostsInBoardByTitle(int pageNum, int pageSize, Long boardId, String searchString) {
+        String[] words = searchString.trim().replaceAll("\\s+", " ").split(" ");
+
+        List<String> searchWords = new ArrayList<>();
+        for(String word : words) {
+            if(word.isBlank()) continue;
+            searchWords.add(word.trim());
+        }
+
+        return postRepository.findPageWithBoardAndTitle(pageNum, pageSize, boardId, searchWords);
+    }
 }
