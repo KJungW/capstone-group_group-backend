@@ -168,9 +168,14 @@ public class ApplicationService {
 
     @Transactional
     public void deleteAllByPost(Long postId) throws JsonProcessingException {
-        // 필요한 데이터 조회
         List<Application> applicationList = applicationRepository.findAllByPost(postId);
-        List<Long> formResultIdList = applicationList.stream().map(app -> app.getRequirementsFormResult().getId()).toList();;
+        deleteAll(applicationList.stream().map(Application::getId).collect(Collectors.toList()));
+    }
+
+    @Transactional
+    public void deleteAll(List<Long> applicationIdList) throws JsonProcessingException {
+        List<Application> applicationList = applicationRepository.findAllById(applicationIdList);
+        List<Long> formResultIdList = applicationList.stream().map(app -> app.getRequirementsFormResult().getId()).toList();
 
         // disabledApplication 생성
         for(Application application : applicationList) {
