@@ -40,29 +40,33 @@ public class MemberService {
     private final JwtUtil jwtUtil;
 
     @Transactional()
-    public void signupStart(SignupMemberInput input) throws MessagingException {
+    public void signupStart(SignupMemberInput input) {
         // 입력된 회원정보에 대한 검증
         validateEmail(input.getEmail());
         checkNickNameAvailability(input.getNickName());
         campusService.checkCampusExistence(input.getCampusId());
-
+        
+        // 인증 번호 생성
+        String certificationNumber;
         try {
-            // 인증번호 생성
-            String certificationNumber = makeCertificationNumber();
-            // Redis에 임시 회원가입정보 저장
-            joinCacheRedisRepository.saveJoinCache(new JoinCache(certificationNumber, input));
-            // 메일 내용 전송
-            String title = "[Group-Group] 회원가입 이메일 인증";
-            String content = makeSignupCompleteMailContent(certificationNumber, input.getEmail());
-            mailSendService.sendEmail(input.getEmail(), title, content);
-
+            certificationNumber = makeCertificationNumber();
         } catch (NoSuchAlgorithmException e) {
             log.error("인증번호 생성 중 예외발생 : ", e);
             throw new SignupLogicException("인증번호 생성 중 예외발생");
+        }
+        
+        // Redis에 회원가입 정보 저장
+        try {
+            joinCacheRedisRepository.saveJoinCache(new JoinCache(certificationNumber, input));
         } catch (JsonProcessingException e) {
             log.error("회원가입 정보를 캐시에 저장 중 JSON변환 예외 발생 : ", e);
             throw new SignupLogicException("회원가입 정보를 캐시에 저장 중 JSON변환 예외 발생");
         }
+        
+        // 메일전송
+        String title = "[Group-Group] 회원가입 이메일 인증";
+        String content = makeSignupCompleteMailContent(certificationNumber, input.getEmail());
+        mailSendService.sendEmail(input.getEmail(), title, content);
     }
 
     @Transactional()

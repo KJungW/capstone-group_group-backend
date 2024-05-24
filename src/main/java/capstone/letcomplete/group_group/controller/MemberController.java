@@ -34,7 +34,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     @Operation(summary = "Signup Start", description = "일반 회원(Member)에 대한 회원가입을 인증메일을 요청하는 API")
-    public void signupStart(@RequestBody @Valid SignupMemberInput input) throws MessagingException {
+    public void signupStart(@RequestBody @Valid SignupMemberInput input) {
         memberService.signupStart(input);
     }
 

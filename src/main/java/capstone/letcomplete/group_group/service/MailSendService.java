@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +17,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class MailSendService {
     private final JavaMailSender mailSender;
 
-    public void sendEmail(String email, String title, String content) throws MessagingException {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
-        helper.setTo(email);
-        helper.setSubject(title);
-        helper.setText(content, true);
-        mailSender.send(mimeMessage);
+    @Async
+    public void sendEmail(String email, String title, String content){
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+            helper.setTo(email);
+            helper.setSubject(title);
+            helper.setText(content, true);
+            mailSender.send(mimeMessage);
+        } catch (MessagingException ignored) {
+            log.error("mailSendError");
+        }
     }
 
 
