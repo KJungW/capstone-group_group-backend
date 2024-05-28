@@ -91,6 +91,17 @@ public class DataSetting {
                 "member3", campusId
         );
 
+        // 시연용 계정추가
+        for(int i=0;i<60;i++){
+            String index = String.format("%2d", i).replace(" ", "0");
+            createInitMember(
+                    index + "commonUser@temp.com",
+                    "qwer1234!",
+                    "commonUser" + index,
+                    campusId
+            );
+        }
+
         // 게시판 추가
         Long boardId = boardService.createBoard(campusId, "조별과제/캡스톤$IT공과");
         boardService.createBoard(campusId, "조별과제/캡스톤$인문예술");
