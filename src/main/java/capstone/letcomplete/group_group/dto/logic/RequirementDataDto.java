@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RequirementData {
+public class RequirementDataDto {
     private String requirementId;
     private String requirementTitle;
     private RequirementResultType resultType;

@@ -1,6 +1,6 @@
 package capstone.letcomplete.group_group.repository;
 
-import capstone.letcomplete.group_group.dto.logic.JoinCache;
+import capstone.letcomplete.group_group.dto.logic.JoinCacheDto;
 import capstone.letcomplete.group_group.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +25,18 @@ public class JoinCacheRedisRepository {
     /*
      * 회원가입 데이터 저장
      */
-    public void saveJoinCache(JoinCache joinCache) throws JsonProcessingException {
-        String key = joinCache.getSignupMemberInput().getEmail();
-        String value = jsonUtil.convertObjectToJson(joinCache);
+    public void saveJoinCache(JoinCacheDto joinCacheDto) throws JsonProcessingException {
+        String key = joinCacheDto.getSignupMemberInput().getEmail();
+        String value = jsonUtil.convertObjectToJson(joinCacheDto);
         redisTemplate.opsForValue().set(key, value, Duration.ofSeconds(joinCacheValidTime));
     }
 
     /*
      * 회원가입 데이터 조회
      */
-    public JoinCache getJoinCache(String email) throws JsonProcessingException {
+    public JoinCacheDto getJoinCache(String email) throws JsonProcessingException {
         String joinCacheJson = redisTemplate.opsForValue().get(email);
-        return jsonUtil.convertJsonToObject(joinCacheJson, JoinCache.class);
+        return jsonUtil.convertJsonToObject(joinCacheJson, JoinCacheDto.class);
     }
 
     /*

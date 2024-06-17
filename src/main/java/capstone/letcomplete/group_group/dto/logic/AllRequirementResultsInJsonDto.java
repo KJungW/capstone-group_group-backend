@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AllRequirementResultsInJson {
+public class AllRequirementResultsInJsonDto {
     private List<TextResult> textResults;
     private List<FileResult> fileResults;
 }

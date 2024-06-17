@@ -1,7 +1,7 @@
 package capstone.letcomplete.group_group.controller;
 
 import capstone.letcomplete.group_group.dto.logic.PostOverViewDto;
-import capstone.letcomplete.group_group.dto.logic.PostOverViewsInBoard;
+import capstone.letcomplete.group_group.dto.logic.PostOverViewsInBoardDto;
 import capstone.letcomplete.group_group.dto.output.GetPostsInBoardOutput;
 import capstone.letcomplete.group_group.dto.output.SearchPostInBoardByTitleOutput;
 import capstone.letcomplete.group_group.service.BoardService;
@@ -30,8 +30,8 @@ public class BoardController {
             @Schema(description = "페이지 사이즈") @Min(value = 1) @RequestParam("pageSize") int pageSize
     ) {
         String boardTitle = boardService.findById(boardId).getTitle();
-        PostOverViewsInBoard postOverViewsInBoard = postService.findPostOverViewInBoard(pageNumber, pageSize, boardId);
-        return new GetPostsInBoardOutput(boardTitle, postOverViewsInBoard);
+        PostOverViewsInBoardDto postOverViewsInBoardDto = postService.findPostOverViewInBoard(pageNumber, pageSize, boardId);
+        return new GetPostsInBoardOutput(boardTitle, postOverViewsInBoardDto);
     }
 
     @GetMapping("/search")

@@ -1,7 +1,7 @@
 package capstone.letcomplete.group_group.service;
 
 import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
-import capstone.letcomplete.group_group.dto.logic.JoinCache;
+import capstone.letcomplete.group_group.dto.logic.JoinCacheDto;
 import capstone.letcomplete.group_group.entity.Campus;
 import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.enumtype.MemberRoleType;
@@ -56,7 +56,7 @@ public class MemberService {
         
         // Redis에 회원가입 정보 저장
         try {
-            joinCacheRedisRepository.saveJoinCache(new JoinCache(certificationNumber, input));
+            joinCacheRedisRepository.saveJoinCache(new JoinCacheDto(certificationNumber, input));
         } catch (JsonProcessingException e) {
             log.error("회원가입 정보를 캐시에 저장 중 JSON변환 예외 발생 : ", e);
             throw new SignupLogicException("회원가입 정보를 캐시에 저장 중 JSON변환 예외 발생");
@@ -72,9 +72,9 @@ public class MemberService {
     public Long signupComplete(String email, String certificationNumber) {
         try{
             checkSignupDataExistenceInCache(email);
-            JoinCache joinCache = joinCacheRedisRepository.getJoinCache(email);
-            validateCertificationNumber(certificationNumber, joinCache.getCertificationNumber());
-            return saveMember(joinCache.getSignupMemberInput()).getId();
+            JoinCacheDto joinCacheDto = joinCacheRedisRepository.getJoinCache(email);
+            validateCertificationNumber(certificationNumber, joinCacheDto.getCertificationNumber());
+            return saveMember(joinCacheDto.getSignupMemberInput()).getId();
         } catch (JsonProcessingException e) {
             log.error("캐시에 저장된 회원가입 정보를 가져올때, JSON변환 예외 발생 : ", e);
             throw new SignupLogicException("캐시에 저장된 회원가입 정보를 가져올때, JSON변환 예외 발생");

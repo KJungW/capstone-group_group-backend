@@ -14,5 +14,5 @@ public class ApplicationDetailDto {
     private Long postId;
     private Long applicant;
     private ApplicationState isPassed;
-    private List<RequirementData> requirementDataList = new ArrayList<>();
+    private List<RequirementDataDto> requirementDataDtoList = new ArrayList<>();
 }
