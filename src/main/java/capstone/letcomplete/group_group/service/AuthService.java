@@ -2,7 +2,6 @@ package capstone.letcomplete.group_group.service;
 
 import capstone.letcomplete.group_group.dto.input.LoginInput;
 import capstone.letcomplete.group_group.dto.logic.JwtClaimsDataDto;
-import capstone.letcomplete.group_group.dto.logic.MemberInfoDto;
 import capstone.letcomplete.group_group.dto.output.LoginMemberOutput;
 import capstone.letcomplete.group_group.entity.Member;
 import capstone.letcomplete.group_group.entity.enumtype.AccountType;

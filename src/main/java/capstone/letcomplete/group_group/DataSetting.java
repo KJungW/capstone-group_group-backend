@@ -1,13 +1,9 @@
 package capstone.letcomplete.group_group;
 
-import capstone.letcomplete.group_group.dto.input.CreatePostInput;
-import capstone.letcomplete.group_group.dto.input.CreateRequirementInput;
 import capstone.letcomplete.group_group.dto.input.SignupMangerInput;
 import capstone.letcomplete.group_group.dto.input.SignupMemberInput;
 import capstone.letcomplete.group_group.entity.Member;
-import capstone.letcomplete.group_group.entity.enumtype.ManagerRoleType;
-import capstone.letcomplete.group_group.entity.enumtype.PassionSize;
-import capstone.letcomplete.group_group.entity.enumtype.RequirementResultType;
+import capstone.letcomplete.group_group.entity.enumtype.ManagerRoleType;;
 import capstone.letcomplete.group_group.repository.ManagerRepository;
 import capstone.letcomplete.group_group.service.*;
 import capstone.letcomplete.group_group.value.DefaultData;
@@ -17,9 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
