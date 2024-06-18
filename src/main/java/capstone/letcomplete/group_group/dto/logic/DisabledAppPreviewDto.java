@@ -19,6 +19,6 @@ public class DisabledAppPreviewDto {
         this.id = dto.getId();
         this.postTitle = dto.getPostTitle();
         this.isPassed = dto.getIsPassed();
-        this.createTime = dto.getCreateTime();
+        this.createTime = dto.getApplicationCreatedDate();
     }
 }
