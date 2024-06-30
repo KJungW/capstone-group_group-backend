@@ -2,8 +2,6 @@ package capstone.letcomplete.group_group.exception.handler;
 
 import capstone.letcomplete.group_group.exception.ErrorResult;
 import capstone.letcomplete.group_group.util.JsonUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

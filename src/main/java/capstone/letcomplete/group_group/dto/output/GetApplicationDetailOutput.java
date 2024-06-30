@@ -22,6 +22,6 @@ public class GetApplicationDetailOutput {
         this.postId = dto.getPostId();
         this.applicant = dto.getApplicant();
         this.isPassed = dto.getIsPassed();
-        this.requirementDataList = dto.getRequirementDataList().stream().map(requirementData -> new RequirementDataOutput(requirementData)).toList();
+        this.requirementDataList = dto.getRequirementDataDtoList().stream().map(requirementData -> new RequirementDataOutput(requirementData)).toList();
     }
 }

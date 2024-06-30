@@ -69,26 +69,26 @@ public class ApplicationService {
 
         // JSON형태의 참여요건 제출물 데이터를 다시 객체로 디코딩
         String requirementResultsJson = application.getRequirementsFormResult().getRequirementResults();
-        AllRequirementResultsInJson allRequirementResults = requirementsFormResultService.convertJsonToRequirementResults(requirementResultsJson);
+        AllRequirementResultsInJsonDto allRequirementResults = requirementsFormResultService.convertJsonToRequirementResults(requirementResultsJson);
         
         // 참여요건 데이터와 제출물 데이터를 형식에 맞게 재구성
         List<FileResult> fileResults = allRequirementResults.getFileResults();
         List<TextResult> textResults = allRequirementResults.getTextResults();
 
-        List<RequirementData> requirementDataList = new ArrayList<>();
+        List<RequirementDataDto> requirementDataDtoList = new ArrayList<>();
         for(Requirement requirement : requirements) {
             if(requirement.getResultType() == RequirementResultType.FILE) {
                 FileResult matchingFileResult = fileResults.stream()
                         .filter(fileResult -> requirement.getId().equals(fileResult.getRequirementId()))
                         .findFirst().orElseThrow(()->new IllegalStateException("참여요건ID에 해당하는 제출물이 없음"));
-                requirementDataList.add(new RequirementData(
+                requirementDataDtoList.add(new RequirementDataDto(
                         matchingFileResult.getRequirementId(), requirement.getTitle(),
                         matchingFileResult.getType(), matchingFileResult.getUrl(), matchingFileResult.getInternalName()));
             } else {
                 TextResult matchingTextResult = textResults.stream()
                         .filter(textResult -> requirement.getId().equals(textResult.getRequirementId()))
                         .findFirst().orElseThrow(()->new IllegalStateException("참여요건ID에 해당하는 제출물이 없음"));
-                requirementDataList.add(new RequirementData(
+                requirementDataDtoList.add(new RequirementDataDto(
                         matchingTextResult.getRequirementId(), requirement.getTitle(),
                         matchingTextResult.getType(), matchingTextResult.getContent(), null));
             }
@@ -97,7 +97,7 @@ public class ApplicationService {
         return new ApplicationDetailDto(
                 application.getId(), application.getPost().getId(),
                 application.getApplicant().getId(), application.getIsPassed(),
-                requirementDataList
+                requirementDataDtoList
         );
     }
 

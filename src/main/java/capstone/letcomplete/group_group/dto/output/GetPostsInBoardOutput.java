@@ -1,7 +1,7 @@
 package capstone.letcomplete.group_group.dto.output;
 
 import capstone.letcomplete.group_group.dto.logic.PostOverViewDto;
-import capstone.letcomplete.group_group.dto.logic.PostOverViewsInBoard;
+import capstone.letcomplete.group_group.dto.logic.PostOverViewsInBoardDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class GetPostsInBoardOutput {
     @Schema(description = "현재 페이지가 첫 페이지인지 여부")
     private boolean isFirstPage;
 
-    public GetPostsInBoardOutput(String boardTitle, PostOverViewsInBoard postOverViewsData) {
+    public GetPostsInBoardOutput(String boardTitle, PostOverViewsInBoardDto postOverViewsData) {
         this.boardTitle = boardTitle;
         this.contents = postOverViewsData.getContents();
         this.totalPages = postOverViewsData.getTotalPages();

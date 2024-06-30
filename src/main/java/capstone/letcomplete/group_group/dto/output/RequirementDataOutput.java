@@ -1,6 +1,6 @@
 package capstone.letcomplete.group_group.dto.output;
 
-import capstone.letcomplete.group_group.dto.logic.RequirementData;
+import capstone.letcomplete.group_group.dto.logic.RequirementDataDto;
 import capstone.letcomplete.group_group.entity.enumtype.RequirementResultType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class RequirementDataOutput {
     private String content;
     private String fileName;
 
-    public RequirementDataOutput(RequirementData dto) {
+    public RequirementDataOutput(RequirementDataDto dto) {
         this.requirementId = dto.getRequirementId();
         this.resultType = dto.getResultType();
         this.content = dto.getContent();

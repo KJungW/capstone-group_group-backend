@@ -1,5 +1,6 @@
 package capstone.letcomplete.group_group.entity;
 
+import capstone.letcomplete.group_group.entity.auditing.BaseEntity;
 import capstone.letcomplete.group_group.entity.enumtype.ApplicationState;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DisabledApplication {
+public class DisabledApplication extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -21,10 +22,10 @@ public class DisabledApplication {
     private String postTitle;
     @Enumerated(value=EnumType.STRING)
     private ApplicationState isPassed;
-    private LocalDateTime createTime;
+    private LocalDateTime applicationCreatedDate;
 
     public static DisabledApplication createDisabledApplication(
-            Long applicationId, Long applicantId, Long postId, String postTitle, ApplicationState isPassed, LocalDateTime createTime
+            Long applicationId, Long applicantId, Long postId, String postTitle, ApplicationState isPassed, LocalDateTime applicationCreatedDate
     ) {
         DisabledApplication entity = new DisabledApplication();
         entity.applicationId  = applicationId;
@@ -32,7 +33,7 @@ public class DisabledApplication {
         entity.postId = postId;
         entity.postTitle = postTitle;
         entity.isPassed = isPassed;
-        entity.createTime = createTime;
+        entity.applicationCreatedDate = applicationCreatedDate;
         return entity;
     }
 }

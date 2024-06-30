@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class PostOverViewsInBoard {
+public class PostOverViewsInBoardDto {
     private List<PostOverViewDto> contents;
     private int totalPages;
     private int currentPageNumber;

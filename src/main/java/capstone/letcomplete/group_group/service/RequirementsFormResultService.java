@@ -72,7 +72,7 @@ public class RequirementsFormResultService {
         List<FileResult> fileResults = convertSaveRequirementResultInputsToFileResult(fileTypeList, inputFiles, fileUploadDir);
 
         // - DB에 저장할 전체 제출물 데이터 객체 생성
-        AllRequirementResultsInJson allResult = new AllRequirementResultsInJson(textResults, fileResults);
+        AllRequirementResultsInJsonDto allResult = new AllRequirementResultsInJsonDto(textResults, fileResults);
         // - 전체 제출물 데이터를 JSON으로 인코딩
         String jsonRequirementResults = jsonUtil.convertObjectToJson(allResult);
         // - DE저장
@@ -91,9 +91,9 @@ public class RequirementsFormResultService {
 
     private List<FileResult> convertSaveRequirementResultInputsToFileResult(List<SaveRequirementResultInput> fileTypeList, List<MultipartFile> inputFiles, String fileUploadDir) throws IOException {
         // 입력된 파일리스트와 파일을 요구하는 참여요건의 ID를 매칭
-        List<RequirementFileResultData> requirementFileResultInputs = fileTypeList.stream().map(requirementResultInput -> {
+        List<RequirementFileResultDataDto> requirementFileResultInputs = fileTypeList.stream().map(requirementResultInput -> {
             MultipartFile matchingFile = inputFiles.stream().filter(file -> file.getOriginalFilename().equals(requirementResultInput.getContent())).findFirst().get();
-            return new RequirementFileResultData(requirementResultInput.getRequirementId(), matchingFile);
+            return new RequirementFileResultDataDto(requirementResultInput.getRequirementId(), matchingFile);
         }).toList();
         // - 파일 업로드
         List<MultipartFile> ordinalInputFiles = requirementFileResultInputs.stream().map(
@@ -116,8 +116,8 @@ public class RequirementsFormResultService {
         return fileResults;
     }
 
-    public AllRequirementResultsInJson convertJsonToRequirementResults (String jsonData) throws JsonProcessingException {
-        return jsonUtil.convertJsonToObject(jsonData, AllRequirementResultsInJson.class);
+    public AllRequirementResultsInJsonDto convertJsonToRequirementResults (String jsonData) throws JsonProcessingException {
+        return jsonUtil.convertJsonToObject(jsonData, AllRequirementResultsInJsonDto.class);
     }
 
     public RequirementsFormResult findById(Long id) {
@@ -156,8 +156,8 @@ public class RequirementsFormResultService {
         
         // 조회된 RequirementsFormResult의 파일 제출물 리스트 조회
         String requirementResultsJson = formResult.getRequirementResults();
-        AllRequirementResultsInJson allRequirementResultsInJson = convertJsonToRequirementResults(requirementResultsJson);
-        List<FileResult> fileResults = allRequirementResultsInJson.getFileResults();
+        AllRequirementResultsInJsonDto allRequirementResultsInJsonDto = convertJsonToRequirementResults(requirementResultsJson);
+        List<FileResult> fileResults = allRequirementResultsInJsonDto.getFileResults();
         
         // 클라우드 스토리지에서 파일 제출물을 모두 제거
         List<String> fileNameList = fileResults.stream().map(FileResult::getExternalName).collect(Collectors.toList());

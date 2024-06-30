@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @AllArgsConstructor
-public class RequirementFileResultData {
+public class RequirementFileResultDataDto {
     private String requirementId;
     private MultipartFile fileResult;
 }

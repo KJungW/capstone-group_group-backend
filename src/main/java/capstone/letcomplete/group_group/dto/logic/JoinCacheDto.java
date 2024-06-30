@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class JoinCache {
+public class JoinCacheDto {
     private String certificationNumber;
     private SignupMemberInput signupMemberInput;
 }
